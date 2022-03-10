@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FileProcessor.CORE\FileProcessor.CORE.csproj" />
+    <ProjectReference Include="..\OrderYourChow.DAL.CORE\OrderYourChow.DAL.CORE.csproj" />
+    <ProjectReference Include="..\OrderYourChow.CORE\OrderYourChow.CORE.csproj" />
+  </ItemGroup>
+
+</Project>
