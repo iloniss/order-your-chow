@@ -481,15 +481,21 @@ namespace OrderYourChow.DAL.CORE.Models
                 entity.HasKey(e => e.RecipeFavouriteId)
                     .HasName("PK__D_RECIPE_FAVOURITE_RecipeFavouriteId");
 
-                entity.ToTable("D_D_RECIPE_FAVOURITE");
+                entity.ToTable("D_RECIPE_FAVOURITE");
 
                 entity.Property(e => e.UserId).HasColumnType("int");
                 entity.Property(e => e.RecipeId).HasColumnType("int");
             });
-
-                OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (optionsBuilder is null)
+            {
+                throw new ArgumentNullException(nameof(optionsBuilder));
+            }
+
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

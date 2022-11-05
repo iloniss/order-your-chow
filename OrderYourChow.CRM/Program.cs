@@ -1,20 +1,81 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using FileProcessor.CORE.Services;
+using FileProcessor.Services;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
+using OrderYourChow.CORE.Contracts.CRM.Product;
+using OrderYourChow.CORE.Contracts.CRM.Recipe;
+using OrderYourChow.CORE.Validators.CRM.Base;
+using OrderYourChow.Repositories.Repositories.CRM.Product;
+using OrderYourChow.Repositories.Repositories.CRM.Recipe;
 
-namespace OrderYourChow.CRM
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddControllers().AddFluentValidation();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.RegisterValidators();
+builder.Services.AddSwaggerGen(options => {
+    options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        Title = "OrderYourChow",
+        Version = "v1",
+        Description = "Dodaj sk³adniki i przepisy, którch potrzebujesz.",
+    });
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+//Services
+builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
+builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//Repository
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<IRecipeProductMeasureRepository, RecipeProductMeasureRepository>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+    builder =>
+    {
+        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
+var configuration = new ConfigurationBuilder()
+     .SetBasePath(Directory.GetCurrentDirectory())
+     .AddJsonFile("appsettings.json", optional: false)
+     .Build();
+
+builder.Services.AddDbContext<OrderYourChow.DAL.CORE.Models.OrderYourChowContext>(options =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("OrderYourChow.DAL.CORE"));
+
+});
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "OrderYourChow.CRM"));
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+ForwardedHeaders.XForwardedProto
+});
+
+app.UseCors(MyAllowSpecificOrigins);
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
