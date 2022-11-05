@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProductCategory } from 'src/models/product_category';
@@ -10,13 +9,13 @@ const AddProduct = () => {
     []
   );
 
-  const getProductCategory = async () => {
+  const getProductCategories = async () => {
     var result = await CategoryService.getAllCategories();
     setProductCategories(result.data);
   };
 
   useEffect(() => {
-    getProductCategory();
+    getProductCategories();
   }, []);
 
   return (

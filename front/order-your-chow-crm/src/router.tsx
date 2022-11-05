@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, Children } from 'react';
 import { Navigate } from 'react-router-dom';
 import { PartialRouteObject } from 'react-router';
 
@@ -24,6 +24,7 @@ const AddCategory = Loader(lazy(() => import('src/content/category/Add')));
 const EditCategory = Loader(lazy(() => import('src/content/category/Edit')));
 const Measures = Loader(lazy(() => import('src/content/measure/Actions')));
 const AddMeasure = Loader(lazy(() => import('src/content/measure/Add')));
+const AddRecipe = Loader(lazy(() => import('src/content/recipe/Add')));
 // Components
 
 // Status
@@ -147,6 +148,20 @@ const routes: PartialRouteObject[] = [
     ]
   },
 
+  {
+    path: 'recipe',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: '/',
+        element: <Navigate to="/recipe/actions" replace />
+      },
+      {
+        path: 'add/info',
+        element: <AddRecipe />
+      }
+    ]
+  },
   {
     path: 'category',
     element: <SidebarLayout />,

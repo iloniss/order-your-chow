@@ -19,9 +19,8 @@ class RecipeService {
           'Content-type': 'multipart/form-data'
         }
       })
-      .then((response: AxiosResponse) => {
-        console.log(response);
-        return null;
+      .then((response: AxiosResponse<Recipe>) => {
+        return response.data.recipeId;
       })
       .catch((reason: AxiosError) => {
         if (reason.response!.status === 400) {

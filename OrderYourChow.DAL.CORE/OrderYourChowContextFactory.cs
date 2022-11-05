@@ -12,7 +12,7 @@ namespace OrderYourChow.DAL.CORE
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
                 .Build();
 
             var dbContextBuilder = new DbContextOptionsBuilder<OrderYourChowContext>();
