@@ -56,26 +56,26 @@ const menuItems: MenuItems[] = [
     items: [
       {
         name: 'Dodaj przepis',
-        link: '/recipes/add',
+        link: '/recipe/add',
         icon: FlatwareTwoToneIcon,
         items: [
           {
             name: 'Podstawowe informacje',
-            link: '/recipes/add/info'
+            link: '/recipe/add/info'
           },
           {
             name: 'Składniki',
-            link: '/recipes/add/ingredients'
+            link: '/recipe/add/ingredients'
           },
           {
             name: 'Opis',
-            link: '/recipes/add/description'
+            link: '/recipe/add/description'
           }
         ]
       },
       {
         name: 'Lista przepisów',
-        link: '/recipes/list',
+        link: '/recipe/list',
         icon: FoodBankTwoToneIcon
       }
     ]

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
-using OrderYourChow.CORE.Models.API.Recipe;
 using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
 using System;
@@ -24,7 +23,8 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 
         public async Task<List<RecipeCategoryDTO>> GetRecipeCategoriesAsync()
         {
-            return _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.Name).ToListAsync());
+            var result = _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.RecipeCategoryId).ToListAsync());
+            return result;
         }
 
         //do zmiany

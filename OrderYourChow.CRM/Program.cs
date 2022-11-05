@@ -1,3 +1,4 @@
+using AutoMapper;
 using FileProcessor.CORE.Services;
 using FileProcessor.Services;
 using FluentValidation.AspNetCore;
@@ -28,7 +29,9 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
 builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
+
+builder.Services.AddSingleton(s => config.CreateMapper());
 
 //Repository
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -47,12 +50,12 @@ builder.Services.AddCors(options =>
 
 var configuration = new ConfigurationBuilder()
      .SetBasePath(Directory.GetCurrentDirectory())
-     .AddJsonFile("appsettings.json", optional: false)
+     .AddEnvironmentVariables()
      .Build();
 
 builder.Services.AddDbContext<OrderYourChow.DAL.CORE.Models.OrderYourChowContext>(options =>
 {
-    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("OrderYourChow.DAL.CORE"));
+    options.UseSqlServer(configuration.GetConnectionString("OrderYourChow"), b => b.MigrationsAssembly("OrderYourChow.DAL.CORE"));
 
 });
 
