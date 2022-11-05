@@ -21,11 +21,8 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             _mapper = mapper;
         }
 
-        public async Task<List<RecipeCategoryDTO>> GetRecipeCategoriesAsync()
-        {
-            var result = _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.RecipeCategoryId).ToListAsync());
-            return result;
-        }
+        public async Task<List<RecipeCategoryDTO>> GetRecipeCategoriesAsync() =>
+            _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.RecipeCategoryId).ToListAsync());
 
         //do zmiany
         public async Task<List<RecipeListDTO>> GetRecipesAsync()
@@ -35,7 +32,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 .ToListAsync());
         }
 
-        public async Task<CORE.Models.CRM.Recipe.RecipeDTO> AddRecipeAsync(CORE.Models.CRM.Recipe.RecipeDTO recipeDTO)
+        public async Task<RecipeDTO> AddRecipeAsync(RecipeDTO recipeDTO)
         {
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -44,7 +41,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 await _orderYourChowContext.DRecipes.AddAsync(recipe);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return _mapper.Map<CORE.Models.CRM.Recipe.RecipeDTO>(recipe);
+                return _mapper.Map<RecipeDTO>(recipe);
             }
             catch (Exception)
             {
