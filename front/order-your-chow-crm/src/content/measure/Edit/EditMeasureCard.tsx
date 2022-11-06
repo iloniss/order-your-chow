@@ -9,23 +9,23 @@ import {
 } from '@mui/material';
 import 'src/styles.css';
 import { useState, FC, ChangeEvent } from 'react';
-import { ProductCategory } from 'src/models/product_category';
-import CategoryService from 'src/services/categoryService';
+import { ProductMeasure } from 'src/models/product_measure';
+import MeasureService from 'src/services/measureService';
 
-interface EditCategoryCardProps {
-  productCategory: ProductCategory;
-  setProductCategory: React.Dispatch<React.SetStateAction<ProductCategory>>;
+interface EditMeasureCardProps {
+  productMeasure: ProductMeasure;
+  setProductMeasure: React.Dispatch<React.SetStateAction<ProductMeasure>>;
 }
 
-const EditCategoryCard: FC<EditCategoryCardProps> = ({
-  productCategory,
-  setProductCategory
+const EditMeasureCard: FC<EditMeasureCardProps> = ({
+  productMeasure,
+  setProductMeasure
 }) => {
   const [formErrorName, setFormErrorName] = useState(true);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setProductCategory({
-      ...productCategory,
+    setProductMeasure({
+      ...productMeasure,
       [event.target.name]: event.target.value
     });
   };
@@ -33,27 +33,26 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (productCategory.name === '') {
+    if (productMeasure.name === '') {
       setFormErrorName(false);
+      return;
     } else {
       setFormErrorName(true);
     }
 
-    if (formErrorName === false) return;
-
     const loginFromData = new FormData();
-    loginFromData.append('name', productCategory.name);
+    loginFromData.append('name', productMeasure.name);
     loginFromData.append(
-      'productCategoryId',
-      productCategory.productCategoryId.toString()
+      'productMeasureId',
+      productMeasure.productMeasureId.toString()
     );
 
-    var result = await CategoryService.putCategory(
-      productCategory.productCategoryId,
+    var result = await MeasureService.putMeasure(
+      productMeasure.productMeasureId,
       loginFromData
     );
     if (result == null) {
-      window.location.href = '/product/category';
+      window.location.href = '/product/measure';
     } else {
       alert(result);
     }
@@ -61,7 +60,7 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
 
   return (
     <Card>
-      <CardHeader title="Edytuj kategorię" />
+      <CardHeader title="Edytuj jednostkę miary" />
       <Divider />
       <CardContent>
         <Box
@@ -72,18 +71,21 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
           noValidate
           autoComplete="off"
         >
-          <span className="textForm">Podaj nazwę kategorii</span>
+          <span className="textForm">Podaj skrót jednostki miary</span>
           <div>
             <TextField
               required
               style={{ width: 700, margin: 20, marginTop: 5, marginBottom: 10 }}
               name="name"
               id="outlined-required"
-              value={productCategory.name}
+              value={productMeasure.name}
               onChange={handleChange}
             />
             {!formErrorName && (
-              <div className="errorsForm">Należy podać nazwę kategorii.</div>
+              <div className="errorsForm">
+                {' '}
+                Należy podać nazwę skrótu jednostki miary.
+              </div>
             )}
           </div>
           <Button
@@ -97,7 +99,7 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
               await handleSubmit(e);
             }}
           >
-            Edytuj kategorię
+            Edytuj miarę
           </Button>
         </Box>
       </CardContent>
@@ -105,4 +107,4 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
   );
 };
 
-export default EditCategoryCard;
+export default EditMeasureCard;

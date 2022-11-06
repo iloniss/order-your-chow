@@ -11,7 +11,7 @@ import 'src/styles.css';
 import { useState, FC, ChangeEvent } from 'react';
 import { AddMeasure } from 'src/models/add_measure';
 import { ProductMeasure } from 'src/models/product_measure';
-import measureService from 'src/services/measureService';
+import MeasureService from 'src/services/measureService';
 
 interface AddMeasuresCardProps {
   productMeasures: ProductMeasure[];
@@ -54,7 +54,7 @@ const AddMeasuresCard: FC<AddMeasuresCardProps> = ({ productMeasures }) => {
     }
     const loginFromData = new FormData();
     loginFromData.append('name', formValue.name);
-    var result = await measureService.postMeasure(loginFromData);
+    var result = await MeasureService.postMeasure(loginFromData);
     console.log(result);
     if (result == null) {
       window.location.href = '/product/measure';

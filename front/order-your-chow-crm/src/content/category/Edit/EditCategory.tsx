@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProductCategory } from 'src/models/product_category';
@@ -13,13 +12,10 @@ const EditCategory = () => {
 
   const getProductCategory = async (productCategoryId: number) => {
     var result = await CategoryService.getCategory(productCategoryId);
-    console.log(result);
-    console.log('pa');
     setProductCategory(result.data);
   };
 
   useEffect(() => {
-    console.log('dupa');
     const params = new URLSearchParams(window.location.search);
     let value = parseInt(params.get('productcategoryid'));
     getProductCategory(value);
