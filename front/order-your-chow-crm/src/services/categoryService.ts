@@ -49,6 +49,7 @@ class CategoryService {
   }
 
   async putCategory(productCategoryId: number, data: FormData) {
+    console.log(data);
     return await http
       .put<ProductCategory>(
         '/productCategory/' + productCategoryId.toString(),

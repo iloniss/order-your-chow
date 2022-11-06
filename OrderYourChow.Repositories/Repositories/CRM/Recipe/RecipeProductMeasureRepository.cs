@@ -44,7 +44,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 
         public async Task<RecipeProductMeasureDTO> GetProductMeasureByIdAsync(int recipeProductMeasureId)
         {
-            return _mapper.Map<RecipeProductMeasureDTO>(await _orderYourChowContext.SProductMeasures.Where(x => x.ProductMeasureId == recipeProductMeasureId).ToListAsync());
+            return _mapper.Map<RecipeProductMeasureDTO>(await _orderYourChowContext.SProductMeasures.Where(x => x.ProductMeasureId == recipeProductMeasureId).SingleOrDefaultAsync());
         }
 
         public async Task<RecipeProductMeasureDTO> DeleteProductMeasureAsync(int recipeProductMeasureId)

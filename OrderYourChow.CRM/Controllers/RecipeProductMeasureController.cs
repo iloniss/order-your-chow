@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Models.CRM.Recipe;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CRM.Controllers
 {
@@ -42,15 +39,13 @@ namespace OrderYourChow.CRM.Controllers
                 return NotFound();
 
             if (deleteResult is ErrorRecipeProductMeasureDTO)
-                return BadRequest();
-
-         
+                return BadRequest();     
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
         [HttpPut("{recipeProductMeasureId}")]
-        public async Task<ActionResult<RecipeProductMeasureDTO>> UpdateRecipeProductMeasure(int recipeProductMeasureId, [FromBody] RecipeProductMeasureDTO recipeProductMeasureDTO)
+        public async Task<ActionResult<RecipeProductMeasureDTO>> UpdateRecipeProductMeasure(int recipeProductMeasureId, [FromForm] RecipeProductMeasureDTO recipeProductMeasureDTO)
         {
             var updateResult = await _recipeProductMeasureRepository.UpdateProductMeasureAsync(recipeProductMeasureId, recipeProductMeasureDTO);
             if (updateResult is EmptyRecipeProductMeasureDTO)

@@ -24,6 +24,7 @@ const AddCategory = Loader(lazy(() => import('src/content/category/Add')));
 const EditCategory = Loader(lazy(() => import('src/content/category/Edit')));
 const Measures = Loader(lazy(() => import('src/content/measure/Actions')));
 const AddMeasure = Loader(lazy(() => import('src/content/measure/Add')));
+const EditMeasure = Loader(lazy(() => import('src/content/measure/Edit')));
 const AddRecipe = Loader(lazy(() => import('src/content/recipe/Add')));
 // Components
 
@@ -144,6 +145,10 @@ const routes: PartialRouteObject[] = [
       {
         path: 'add',
         element: <AddMeasure />
+      },
+      {
+        path: 'edit',
+        element: <EditMeasure />
       }
     ]
   },
