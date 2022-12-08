@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Recipe } from 'src/models/recipe';
 import { RecipeCategory } from 'src/models/recipe_category';
+import { RecipeProduct } from 'src/models/recipe_product';
 import http from '../http-common';
 
 class RecipeService {
@@ -21,6 +22,26 @@ class RecipeService {
       })
       .then((response: AxiosResponse<Recipe>) => {
         return response.data.recipeId;
+      })
+      .catch((reason: AxiosError) => {
+        if (reason.response!.status === 400) {
+          return reason.response.data.errors.Name;
+        } else {
+          return 'Nieoczekiwany problem.';
+        }
+      });
+  }
+
+  async postRecipeProduct(data: FormData, recipeId: number) {
+    return await http
+      .post<RecipeProduct>('/recipe/' + recipeId.toString() + '/products', data, {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        }
+      })
+      .then((response: AxiosResponse) => {
+        console.log(response);
+        return null;
       })
       .catch((reason: AxiosError) => {
         if (reason.response!.status === 400) {

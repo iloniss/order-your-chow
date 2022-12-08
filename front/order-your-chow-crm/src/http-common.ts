@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default axios.create({
-  baseURL: "https://localhost:44387/api",
+  baseURL: 'https://localhost:443/api',
   headers: {
-    "Content-type": "application/json", 
-    "Access-Control-Allow-Origin": "*"
+    'Content-type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   }
 });

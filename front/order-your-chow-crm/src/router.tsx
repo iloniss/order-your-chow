@@ -24,6 +24,9 @@ const AddCategory = Loader(lazy(() => import('src/content/category/Add')));
 const EditCategory = Loader(lazy(() => import('src/content/category/Edit')));
 const Measures = Loader(lazy(() => import('src/content/measure/Actions')));
 const AddMeasure = Loader(lazy(() => import('src/content/measure/Add')));
+const AddIngredients = Loader(
+  lazy(() => import('src/content/recipe/AddIngredients'))
+);
 const EditMeasure = Loader(lazy(() => import('src/content/measure/Edit')));
 const AddRecipe = Loader(lazy(() => import('src/content/recipe/Add')));
 // Components
@@ -258,6 +261,16 @@ const routes: PartialRouteObject[] = [
       //         path: 'forms',
       //         element: <Forms />
       //       },
+    ]
+  },
+  {
+    path: 'recipes/add',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: 'ingredients',
+        element: <AddIngredients />
+      }
     ]
   }
 ];

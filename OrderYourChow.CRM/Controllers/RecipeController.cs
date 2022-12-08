@@ -29,11 +29,11 @@ namespace OrderYourChow.CRM.Controllers
             return Ok(await _recipeRepository.GetRecipeCategoriesAsync());
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes()
-        //{
-        //    return Ok(await _recipeRepository.GetRecipesAsync());
-        //}
+        [HttpGet]
+        public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes()
+        {
+            return Ok(await _recipeRepository.GetRecipesAsync());
+        }
 
         [HttpPost]
         public async Task<ActionResult<RecipeDTO>> Add([Required] IFormFile imageFile, [FromForm] RecipeDTO recipeDTO)

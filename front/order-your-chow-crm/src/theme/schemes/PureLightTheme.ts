@@ -767,7 +767,11 @@ export const PureLightTheme = createTheme({
           '.MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment':
             {
               right: 14
-            }
+            },
+          '&:hover, &.MuiSelected': {
+            backgroundColor: colors.alpha.black[5],
+            color: colors.alpha.black[100]
+          }
         },
         clearIndicator: {
           background: colors.error.lighter,
