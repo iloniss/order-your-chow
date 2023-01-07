@@ -48,10 +48,7 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
       productCategory.productCategoryId.toString()
     );
 
-    var result = await categoryService.putCategory(
-      productCategory.productCategoryId,
-      loginFromData
-    );
+    var result = await categoryService.putCategory(loginFromData);
     console.log(result);
     if (result == null) {
       window.location.href = '/product/category';

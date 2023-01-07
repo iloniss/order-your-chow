@@ -1,4 +1,5 @@
 ﻿using OrderYourChow.CORE.Models.CRM.Product;
+using OrderYourChow.CORE.Queries.CRM.Product;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace OrderYourChow.CORE.Contracts.CRM.Product
     {
         Task<ProductCategoryDTO> AddProductCategoryAsync(ProductCategoryDTO productCategoryDTO);
         Task<List<ProductCategoryDTO>> GetProductCategoriesAsync();
-        Task<ProductCategoryDTO> GetProductCategoryByNameAsync(string name);
-        Task<ProductCategoryDTO> GetProductCategoryByIdAsync(int productCategoryId);
+        Task<ProductCategoryDTO> GetProductCategoryAsync(GetProductCategoryQuery getProductCategoryQuery);
         Task<ProductCategoryDTO> DeleteProductCategoryAsync(int productCategoryid);
-        Task<ProductCategoryDTO> UpdateProductCategoryAsync(int productCategoryId, ProductCategoryDTO productCategoryDTO);
+        Task<ProductCategoryDTO> UpdateProductCategoryAsync(ProductCategoryDTO productCategoryDTO);
+        Task<bool> ProductCategoryIsUsed(int productCategoryId);
     }
 }

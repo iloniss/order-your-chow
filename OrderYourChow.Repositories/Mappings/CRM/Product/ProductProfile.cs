@@ -22,7 +22,6 @@ namespace OrderYourChow.Repositories.Mappings.CRM.Product
                 .ReverseMap();
 
             CreateMap<AddProductDTO, SProduct>()
-                .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(d => d.CategoryId, opt => opt.MapFrom(src => src.ProductCategoryId))
                 .ForMember(d => d.Image, opt => opt.MapFrom(src => src.Image))

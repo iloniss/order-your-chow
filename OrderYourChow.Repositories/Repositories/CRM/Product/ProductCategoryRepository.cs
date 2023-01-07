@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FileProcessor.CORE.Services;
 using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Product;
@@ -8,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OrderYourChow.CORE.Queries.CRM.Product;
+using OrderYourChow.Repositories.Queries.CRM.Product;
+using LinqKit;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Product
 {
@@ -31,7 +33,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
                 await _orderYourChowContext.SProductCategories.AddAsync(productCategory);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return _mapper.Map<ProductCategoryDTO>(productCategory);
+                return new CreatedProductCategoryDTO();
             }
             catch(Exception)
             {
@@ -39,31 +41,19 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
             }
         }
 
-        public async Task<List<ProductCategoryDTO>> GetProductCategoriesAsync()
-        {
-            return _mapper.Map<List<ProductCategoryDTO>>(await _orderYourChowContext.SProductCategories.OrderBy(x => x.Name).ToListAsync());
-        }
+        public async Task<List<ProductCategoryDTO>> GetProductCategoriesAsync() => 
+            _mapper.Map<List<ProductCategoryDTO>>(await _orderYourChowContext.SProductCategories.OrderBy(x => x.Name).ToListAsync());
 
-        public async Task<ProductCategoryDTO> GetProductCategoryByNameAsync(string name)
-        {
-            return _mapper.Map<ProductCategoryDTO>(await _orderYourChowContext.SProductCategories.Where(x => x.Name == name).SingleOrDefaultAsync());
-        }
-
-        public async Task<ProductCategoryDTO> GetProductCategoryByIdAsync(int productCategoryId)
-        {
-            return _mapper.Map<ProductCategoryDTO>(await _orderYourChowContext.SProductCategories.Where(x => x.ProductCategoryId == productCategoryId).SingleOrDefaultAsync());
-        }
+        public async Task<ProductCategoryDTO> GetProductCategoryAsync(GetProductCategoryQuery getProductCategoryQuery) => 
+            _mapper.Map<ProductCategoryDTO>(await _orderYourChowContext.SProductCategories
+                .Where(GetProductCategoryQuerySpec.Filter(getProductCategoryQuery).Expand())
+                .SingleOrDefaultAsync());
 
         public async Task<ProductCategoryDTO> DeleteProductCategoryAsync(int productCategoryId)
         {
             var productCategory = await _orderYourChowContext.SProductCategories.Where(x => x.ProductCategoryId == productCategoryId).SingleOrDefaultAsync();
             if (productCategory == null)
-                return new EmptyProductCategoryDTO();
-
-            bool isUsed = await _orderYourChowContext.SProducts.Where(x => x.CategoryId == productCategoryId).AnyAsync();
-
-            if (isUsed)
-                return new ErrorProductCategoryDTO();
+                return new EmptyProductCategoryDTO(CORE.Const.CRM.Product.NotFoundProductCategory);
 
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -71,7 +61,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
                 _orderYourChowContext.Remove(productCategory);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return null;
+                return new DeletedProductCategoryDTO();
             }
             catch (Exception)
             {
@@ -79,11 +69,11 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
             }
         }
 
-        public async Task<ProductCategoryDTO> UpdateProductCategoryAsync(int productCategoryId, ProductCategoryDTO productCategoryDTO)
+        public async Task<ProductCategoryDTO> UpdateProductCategoryAsync(ProductCategoryDTO productCategoryDTO)
         {
-            var productCategory = await _orderYourChowContext.SProductCategories.Where(x => x.ProductCategoryId == productCategoryId).SingleOrDefaultAsync();
+            var productCategory = await _orderYourChowContext.SProductCategories.Where(x => x.ProductCategoryId == productCategoryDTO.ProductCategoryId).SingleOrDefaultAsync();
             if (productCategory == null)
-                return new EmptyProductCategoryDTO();
+                return new EmptyProductCategoryDTO(CORE.Const.CRM.Product.NotFoundProductCategory);
 
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -92,12 +82,15 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
 
-                return _mapper.Map<ProductCategoryDTO>(productCategory);
+                return new UpdatedProductCategoryDTO();
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public async Task<bool> ProductCategoryIsUsed(int productCategoryId) => 
+            await _orderYourChowContext.SProducts.Where(x => x.CategoryId == productCategoryId).AnyAsync();
     }
 }

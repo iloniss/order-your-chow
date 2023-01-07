@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
+using OrderYourChow.CORE.Services.CRM.Product;
 using OrderYourChow.CORE.Validators.CRM.Base;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 using OrderYourChow.Repositories.Repositories.CRM.Recipe;
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen(options => {
 //Services
 builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
 builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
 var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
 
@@ -82,3 +84,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
