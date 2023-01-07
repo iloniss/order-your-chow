@@ -38,7 +38,6 @@ class ProductService {
         }
       })
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -53,7 +52,6 @@ class ProductService {
   }
 
   async putProduct(productId: number, data: FormData) {
-    console.log(data);
     return await http
       .put<Product>('/product/' + productId.toString(), data, {
         headers: {
@@ -64,7 +62,6 @@ class ProductService {
         return null;
       })
       .catch((reason: AxiosError) => {
-        console.log(reason.response);
         if (
           reason.response!.status === 400 ||
           reason.response!.status === 404

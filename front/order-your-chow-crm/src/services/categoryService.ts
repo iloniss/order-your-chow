@@ -11,7 +11,6 @@ class CategoryService {
     return await http
       .delete('/productCategory/' + productCategoryId.toString())
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -34,7 +33,6 @@ class CategoryService {
     return await http
       .post<ProductCategory>('/productCategory', data)
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -49,7 +47,6 @@ class CategoryService {
   }
 
   async putCategory(productCategoryId: number, data: FormData) {
-    console.log(data);
     return await http
       .put<ProductCategory>(
         '/productCategory/' + productCategoryId.toString(),

@@ -55,7 +55,6 @@ const AddMeasuresCard: FC<AddMeasuresCardProps> = ({ productMeasures }) => {
     const loginFromData = new FormData();
     loginFromData.append('name', formValue.name);
     var result = await MeasureService.postMeasure(loginFromData);
-    console.log(result);
     if (result == null) {
       window.location.href = '/product/measure';
     } else {
