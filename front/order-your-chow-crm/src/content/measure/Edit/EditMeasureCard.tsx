@@ -9,56 +9,50 @@ import {
 } from '@mui/material';
 import 'src/styles.css';
 import { useState, FC, ChangeEvent } from 'react';
-import { ProductCategory } from 'src/models/product_category';
-import categoryService from 'src/services/categoryService';
-import { AddCategory } from 'src/models/add_category';
+import { ProductMeasure } from 'src/models/product_measure';
+import MeasureService from 'src/services/measureService';
 
-interface AddCategoriesCardProps {
-  productCategories: ProductCategory[];
+interface EditMeasureCardProps {
+  productMeasure: ProductMeasure;
+  setProductMeasure: React.Dispatch<React.SetStateAction<ProductMeasure>>;
 }
 
-const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
-  productCategories
+const EditMeasureCard: FC<EditMeasureCardProps> = ({
+  productMeasure,
+  setProductMeasure
 }) => {
-  const categoryOptions = [
-    {
-      id: '0',
-      name: 'Wszystkie'
-    }
-  ];
-
-  productCategories.forEach((element) => {
-    categoryOptions.push({
-      id: element.productCategoryId.toString(),
-      name: element.name
-    });
-  });
-
-  const [formValue, setformValue] = useState<AddCategory>({
-    name: ''
-  });
-
-  const [formError, setFormError] = useState(true);
+  const [formErrorName, setFormErrorName] = useState(true);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setformValue({
-      ...formValue,
+    setProductMeasure({
+      ...productMeasure,
       [event.target.name]: event.target.value
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formValue.name === '') {
-      setFormError(false);
+
+    if (productMeasure.name === '') {
+      setFormErrorName(false);
+      return;
     } else {
-      setFormError(true);
+      setFormErrorName(true);
     }
+
     const loginFromData = new FormData();
-    loginFromData.append('name', formValue.name);
-    var result = await categoryService.postCategory(loginFromData);
+    loginFromData.append('name', productMeasure.name);
+    loginFromData.append(
+      'productMeasureId',
+      productMeasure.productMeasureId.toString()
+    );
+
+    var result = await MeasureService.putMeasure(
+      productMeasure.productMeasureId,
+      loginFromData
+    );
     if (result == null) {
-      window.location.href = '/product/category';
+      window.location.href = '/product/measure';
     } else {
       alert(result);
     }
@@ -66,7 +60,7 @@ const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
 
   return (
     <Card>
-      <CardHeader title="Nowa kategoria" />
+      <CardHeader title="Edytuj jednostkę miary" />
       <Divider />
       <CardContent>
         <Box
@@ -77,21 +71,23 @@ const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
           noValidate
           autoComplete="off"
         >
-          <span className="textForm">Podaj nazwę kategorii</span>
+          <span className="textForm">Podaj skrót jednostki miary</span>
           <div>
             <TextField
               required
               style={{ width: 700, margin: 20, marginTop: 5, marginBottom: 10 }}
               name="name"
               id="outlined-required"
-              value={formValue.name}
+              value={productMeasure.name}
               onChange={handleChange}
             />
-            {!formError && (
-              <div className="errorsForm">Należy podać nazwę kategorii.</div>
+            {!formErrorName && (
+              <div className="errorsForm">
+                {' '}
+                Należy podać nazwę skrótu jednostki miary.
+              </div>
             )}
           </div>
-
           <Button
             type="submit"
             style={{ width: 200, marginLeft: 250, marginTop: 30 }}
@@ -103,7 +99,7 @@ const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
               await handleSubmit(e);
             }}
           >
-            Dodaj kategorię
+            Edytuj miarę
           </Button>
         </Box>
       </CardContent>
@@ -111,4 +107,4 @@ const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
   );
 };
 
-export default AddCategoriesCard;
+export default EditMeasureCard;

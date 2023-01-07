@@ -9,6 +9,7 @@ namespace OrderYourChow.Repositories.Mappings.Shared.Recipe
         public RecipeProfile()
         {
             CreateMap<RecipeProductDTO, DRecipeProduct>()
+                .ForMember(d => d.RecipeProductId, opt => opt.MapFrom(src => src.RecipeProductId))
                 .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
                 .ForMember(d => d.ProductMeasureId, opt => opt.MapFrom(src => src.ProductMeasureId))
                 .ForMember(d => d.Count, opt => opt.MapFrom(src => src.Count))

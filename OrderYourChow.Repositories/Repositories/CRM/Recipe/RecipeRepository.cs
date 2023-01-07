@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OrderYourChow.CORE.Enums;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 {
@@ -25,11 +26,35 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.RecipeCategoryId).ToListAsync());
 
         //do zmiany
-        public async Task<List<RecipeListDTO>> GetRecipesAsync()
+        public async Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive)
         {
+            if(isActive == null)
+            {
+                return _mapper.Map<List<RecipeListDTO>>(await _orderYourChowContext.DRecipes
+                    .ToListAsync());
+            }
+
             return _mapper.Map<List<RecipeListDTO>>(await _orderYourChowContext.DRecipes
                 .Where(recipe => recipe.Active == true)
                 .ToListAsync());
+        }
+
+        public async Task<RecipeDTO> GetRecipeAsync(int recipeId)
+        {
+            return _mapper.Map<RecipeDTO>(await _orderYourChowContext.DRecipes
+                .Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync());
+        }
+
+        public async Task<RecipeProductListDTO> GetRecipeProductsAsync(int recipeId)
+        {
+            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();
+            if (recipe == null)
+                return null;
+            return new RecipeProductListDTO()
+            {
+                RecipeProductList = _mapper.Map<List<RecipeProductDTO>>(await _orderYourChowContext.DRecipeProducts
+                .Where(recipe => recipe.RecipeId == recipeId).ToListAsync())
+            };
         }
 
         public async Task<RecipeDTO> AddRecipeAsync(RecipeDTO recipeDTO)
@@ -49,24 +74,19 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             }
         }
 
-        public async Task<bool> AddProductsAsync(int recipeId, List<RecipeProductDTO> recipeProductDTOs)
+        public async Task<bool> SaveProductsAsync(int recipeId, 
+            IEnumerable<RecipeProductDTO> newRecipeProducts, 
+            IEnumerable<RecipeProductDTO> updatedRecipeProducts, 
+            IEnumerable<RecipeProductDTO> deletedRecipeProducts)
         {
-            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();
-            if (recipe == null)
-                return false;
-
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
             {
-                foreach (var productDTO in recipeProductDTOs)
-                {
-                    var product = _mapper.Map<DRecipeProduct>(productDTO);
-                    product.RecipeId = recipeId;
-                    await _orderYourChowContext.DRecipeProducts.AddAsync(product);
-                }
+                await AddRecipeProductsAsync(recipeId, newRecipeProducts);
+                await UpdateRecipeProductsAsync(updatedRecipeProducts);
+                await DeleteRecipeProductsAsync(deletedRecipeProducts);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-
                 return true;
             }
             catch (Exception)
@@ -75,6 +95,39 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             }
         }
 
+        private async Task AddRecipeProductsAsync(int recipeId, IEnumerable<RecipeProductDTO> newRecipeProducts)
+        {
+            await _orderYourChowContext.DRecipeProducts.AddRangeAsync(newRecipeProducts.Select(x => new DRecipeProduct
+            {
+                Count = x.Count,
+                ProductId = x.ProductId,
+                ProductMeasureId = x.ProductMeasureId,
+                RecipeId = recipeId,
+            }).ToList());
+        }
+
+        private async Task UpdateRecipeProductsAsync(IEnumerable<RecipeProductDTO> updatedRecipeProducts)
+        {
+            foreach (var recipeProduct in updatedRecipeProducts)
+            {
+                var productToUpdate = await _orderYourChowContext.DRecipeProducts
+                    .Where(x => x.RecipeProductId == recipeProduct.RecipeProductId)
+                    .SingleOrDefaultAsync();
+                productToUpdate.ProductMeasureId = recipeProduct.ProductMeasureId;
+                productToUpdate.ProductId = recipeProduct.ProductId;
+                productToUpdate.Count = recipeProduct.Count;
+            };
+        }
+        private async Task DeleteRecipeProductsAsync(IEnumerable<RecipeProductDTO> deletedRecipeProducts)
+        {
+            foreach (var recipeProduct in deletedRecipeProducts)
+            {
+                var productsToDelete = await _orderYourChowContext.DRecipeProducts
+                    .Where(x => x.RecipeProductId == recipeProduct.RecipeProductId)
+                    .SingleOrDefaultAsync();
+                _orderYourChowContext.DRecipeProducts.Remove(productsToDelete);
+            }
+        }
         public async Task<bool> AddDescriptionAsync(int recipeId, RecipeDescriptionDTO recipeDescriptionDTO)
         {
             var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();

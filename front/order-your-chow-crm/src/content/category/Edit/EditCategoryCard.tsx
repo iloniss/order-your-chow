@@ -10,7 +10,7 @@ import {
 import 'src/styles.css';
 import { useState, FC, ChangeEvent } from 'react';
 import { ProductCategory } from 'src/models/product_category';
-import categoryService from 'src/services/categoryService';
+import CategoryService from 'src/services/categoryService';
 
 interface EditCategoryCardProps {
   productCategory: ProductCategory;

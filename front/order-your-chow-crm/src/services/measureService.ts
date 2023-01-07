@@ -11,7 +11,6 @@ class MeasureService {
     return await http
       .delete('/recipeProductMeasure/' + productMeasureId.toString())
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -25,11 +24,16 @@ class MeasureService {
       });
   }
 
+  async getMeasure(productMeasureId: number) {
+    return await http.get<ProductMeasure>(
+      '/recipeProductMeasure/' + productMeasureId.toString()
+    );
+  }
+
   async postMeasure(data: FormData) {
     return await http
       .post<ProductMeasure>('/recipeProductMeasure', data)
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -43,14 +47,13 @@ class MeasureService {
       });
   }
 
-  async putMeasure(productCategoryId: number, data: FormData) {
+  async putMeasure(productMeasureId: number, data: FormData) {
     return await http
       .put<ProductMeasure>(
-        '/recipeProductMeasure' + productCategoryId.toString(),
+        '/recipeProductMeasure/' + productMeasureId.toString(),
         data
       )
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {

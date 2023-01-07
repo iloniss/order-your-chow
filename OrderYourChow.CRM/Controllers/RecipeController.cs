@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
+using OrderYourChow.CORE.Contracts.Services;
 using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -15,12 +15,14 @@ namespace OrderYourChow.CRM.Controllers
         private readonly IRecipeRepository _recipeRepository;
         private readonly IFileProcessor _fileProcessor;
         private readonly IFileProcessorValidator _fileProcessorValidator;
+        private readonly IRecipeService _recipeService;
         public RecipeController(IRecipeRepository recipeRepository, IFileProcessor fileProcessor,
-            IFileProcessorValidator fileProcessorValidator)
+            IFileProcessorValidator fileProcessorValidator, IRecipeService recipeService)
         {
             _recipeRepository = recipeRepository;
             _fileProcessor = fileProcessor;
             _fileProcessorValidator = fileProcessorValidator;
+            _recipeService = recipeService;
         }
 
         [HttpGet("category")]
@@ -29,11 +31,22 @@ namespace OrderYourChow.CRM.Controllers
             return Ok(await _recipeRepository.GetRecipeCategoriesAsync());
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes()
-        //{
-        //    return Ok(await _recipeRepository.GetRecipesAsync());
-        //}
+        [HttpGet]
+        public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes(bool? isActive)
+        {
+            return Ok(await _recipeRepository.GetRecipesAsync(isActive));
+        }
+
+        [HttpGet("{recipeId:int}/recipeProducts")]
+        public async Task<ActionResult<RecipeProductListDTO>> GetRecipeProducts([FromRoute] int recipeId)
+        {
+            var result = await _recipeRepository.GetRecipeProductsAsync(recipeId);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<ActionResult<RecipeDTO>> Add([Required] IFormFile imageFile, [FromForm] RecipeDTO recipeDTO)
@@ -48,9 +61,9 @@ namespace OrderYourChow.CRM.Controllers
 
 
         [HttpPost("{recipeId}/products")]
-        public async Task<ActionResult<bool>> AddProducts(int recipeId, [FromBody] List<RecipeProductDTO> recipeProductDTOs)
+        public async Task<ActionResult<bool>> SaveProducts(int recipeId, [FromBody] RecipeProductListDTO recipeProductListDTO)
         {
-            var insertResult = await _recipeRepository.AddProductsAsync(recipeId, recipeProductDTOs);
+            var insertResult = await _recipeService.SaveProductsAsync(recipeId, recipeProductListDTO.RecipeProductList);
             if (!insertResult)
                 return NotFound();
 

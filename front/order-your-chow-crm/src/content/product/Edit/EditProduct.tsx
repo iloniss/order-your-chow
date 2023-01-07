@@ -21,13 +21,11 @@ const EditProduct = () => {
 
   const getProductCategory = async () => {
     var result = await CategoryService.getAllCategories();
-    console.log(result);
     setProductCategories(result.data);
   };
 
   const getProduct = async (productId: number) => {
     var result = await ProductService.getProductById(productId);
-    console.log(result);
     setproductData(result.data);
   };
 

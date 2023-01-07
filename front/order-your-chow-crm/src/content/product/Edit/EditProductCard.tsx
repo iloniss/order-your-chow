@@ -84,7 +84,6 @@ const EditProductCard: FC<EditProductCardProps> = ({
       productData.productId,
       loginFromData
     );
-    console.log(result);
     if (result == null) {
       window.location.href = '/product/actions';
     } else {

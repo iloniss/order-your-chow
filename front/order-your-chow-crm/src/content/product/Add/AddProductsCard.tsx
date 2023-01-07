@@ -95,7 +95,6 @@ const AddProductsCard: FC<AddProductsCardProps> = ({ productCategories }) => {
         .files[0]
     );
     var result = await ProductService.postProduct(loginFromData);
-    console.log(result);
     if (result == null) {
       window.location.href = '/product/actions';
     } else {
