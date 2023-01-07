@@ -53,6 +53,7 @@ class ProductService {
   }
 
   async putProduct(productId: number, data: FormData) {
+    console.log(data);
     return await http
       .put<Product>('/product/' + productId.toString(), data, {
         headers: {

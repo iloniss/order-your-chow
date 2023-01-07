@@ -80,6 +80,8 @@ const EditProductCard: FC<EditProductCardProps> = ({
       );
     }
 
+    console.log(loginFromData);
+
     var result = await ProductService.putProduct(
       productData.productId,
       loginFromData

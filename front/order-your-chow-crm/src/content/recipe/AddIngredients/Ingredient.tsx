@@ -2,35 +2,18 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Autocomplete, TextField, Button } from '@mui/material';
 import { FC, ChangeEvent, Key } from 'react';
 import { Product } from 'src/models/product';
+import { ProductStatus } from 'src/models/ProductStatus';
 import { ProductMeasure } from 'src/models/product_measure';
+import { RecipeProduct } from 'src/models/recipe_product';
 
 interface IngredientCardProps {
   index: Key;
   products: Product[];
   productMeasures: ProductMeasure[];
   onDeleteIngredient: (id: Key) => void;
-  valueIngredient: {
-    id: number;
-    productId: number;
-    productMeasureId: number;
-    count: number;
-  };
-  ingredientForm: {
-    id: number;
-    productId: number;
-    productMeasureId: number;
-    count: number;
-  }[];
-  setIngredientForm: React.Dispatch<
-    React.SetStateAction<
-      {
-        id: number;
-        productId: number;
-        productMeasureId: number;
-        count: number;
-      }[]
-    >
-  >;
+  valueIngredient: RecipeProduct;
+  recipeProducts: RecipeProduct[];
+  setRecipeProducts: React.Dispatch<React.SetStateAction<RecipeProduct[]>>;
 }
 
 const Ingredient: FC<IngredientCardProps> = ({
@@ -39,8 +22,8 @@ const Ingredient: FC<IngredientCardProps> = ({
   productMeasures,
   onDeleteIngredient,
   valueIngredient,
-  ingredientForm,
-  setIngredientForm
+  recipeProducts,
+  setRecipeProducts
 }) => {
   const optionsMeasure: { id: number; label: string }[] = productMeasures.map(
     (option) => ({
@@ -60,26 +43,31 @@ const Ingredient: FC<IngredientCardProps> = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index
   ): void => {
-    var data = [...ingredientForm];
+    var data = [...recipeProducts];
     data[index]['count'] = +event.target.value;
-    setIngredientForm(data);
+    if (data[index]['recipeProductId'] !== 0)
+      data[index]['status'] = ProductStatus.Updated;
+    setRecipeProducts(data);
   };
 
   const handleChangeProduct = (event, value, index): void => {
-    let data = [...ingredientForm];
+    let data = [...recipeProducts];
     data[index]['productId'] = value.id;
-    console.log(data);
-    setIngredientForm(data);
+    if (data[index]['recipeProductId'] !== 0)
+      data[index]['status'] = ProductStatus.Updated;
+    setRecipeProducts(data);
   };
 
   const handleChangeMeasure = (event, value, index): void => {
-    let data = [...ingredientForm];
+    let data = [...recipeProducts];
     data[index]['productMeasureId'] = value.id;
-    setIngredientForm(data);
+    if (data[index]['recipeProductId'] !== 0)
+      data[index]['status'] = ProductStatus.Updated;
+    setRecipeProducts(data);
   };
 
   const deleteIngredient = () => {
-    onDeleteIngredient(ingredientForm[index].id);
+    onDeleteIngredient(recipeProducts[index].recipeProductId);
   };
 
   return (
@@ -92,32 +80,43 @@ const Ingredient: FC<IngredientCardProps> = ({
         options={optionsProduct}
         onChange={(event, value) => handleChangeProduct(event, value, index)}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Produkty"
-            value={valueIngredient.productId}
-            name="productId"
-          />
+          <TextField {...params} label="Produkty" name="productId" />
         )}
+        value={
+          valueIngredient.productId !== 0
+            ? {
+                id: valueIngredient.productId,
+                label: optionsProduct?.find(
+                  (product) => product.id === valueIngredient.productId
+                ).label
+              }
+            : { id: '', label: '' }
+        }
       />
       <Autocomplete
         disableClearable
         options={optionsMeasure}
         onChange={(event, value) => handleChangeMeasure(event, value, index)}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Miara"
-            value={valueIngredient.productMeasureId}
-            name="productMeasureId"
-          />
+          <TextField label="Miara" {...params} name="productMeasureId" />
         )}
+        value={
+          valueIngredient.productMeasureId !== 0
+            ? {
+                id: valueIngredient.productMeasureId,
+                label: optionsMeasure?.find(
+                  (measure) => measure.id === valueIngredient.productMeasureId
+                ).label
+              }
+            : { id: '', label: '' }
+        }
       />
       <div>
         <TextField
-          label="Ilość"
           name="count"
+          label={'Ilość'}
           onChange={(event) => handleChangeCount(event, index)}
+          value={valueIngredient.count === 0 ? '' : valueIngredient.count}
         />
       </div>
       <Button onClick={deleteIngredient}>
