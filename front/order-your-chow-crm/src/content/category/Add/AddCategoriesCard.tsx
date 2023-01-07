@@ -57,7 +57,6 @@ const AddCategoriesCard: FC<AddCategoriesCardProps> = ({
     const loginFromData = new FormData();
     loginFromData.append('name', formValue.name);
     var result = await categoryService.postCategory(loginFromData);
-    console.log(result);
     if (result == null) {
       window.location.href = '/product/category';
     } else {

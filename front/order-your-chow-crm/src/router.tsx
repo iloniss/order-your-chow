@@ -264,7 +264,7 @@ const routes: PartialRouteObject[] = [
     ]
   },
   {
-    path: 'recipes/add',
+    path: 'recipe/add',
     element: <SidebarLayout />,
     children: [
       {

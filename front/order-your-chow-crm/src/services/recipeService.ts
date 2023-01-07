@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Recipe } from 'src/models/recipe';
 import { RecipeCategory } from 'src/models/recipe_category';
-import { RecipeProduct } from 'src/models/recipe_product';
+import { RecipeProductArray } from 'src/models/recipe_product_array';
 import http from '../http-common';
 
 class RecipeService {
@@ -11,6 +11,12 @@ class RecipeService {
 
   async getAllRecipeCategories() {
     return await http.get<Array<RecipeCategory>>('/recipe/category');
+  }
+
+  async getRecipeProducts(recipeId: Number) {
+    return await http.get<RecipeProductArray>(
+      '/recipe/' + recipeId.toString() + '/recipeProducts'
+    );
   }
 
   async postRecipe(data: FormData) {
@@ -32,15 +38,18 @@ class RecipeService {
       });
   }
 
-  async postRecipeProduct(data: FormData, recipeId: number) {
+  async postRecipeProduct(data: RecipeProductArray, recipeId: number) {
     return await http
-      .post<RecipeProduct>('/recipe/' + recipeId.toString() + '/products', data, {
-        headers: {
-          'Content-type': 'multipart/form-data'
+      .post<RecipeProductArray>(
+        '/recipe/' + recipeId.toString() + '/products',
+        JSON.stringify(data),
+        {
+          headers: {
+            'Content-type': 'application/JSON'
+          }
         }
-      })
+      )
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {

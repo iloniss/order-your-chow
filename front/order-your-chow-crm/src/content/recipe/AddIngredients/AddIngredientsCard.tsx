@@ -16,80 +16,73 @@ import { ProductMeasure } from 'src/models/product_measure';
 import Ingredient from './Ingredient';
 import recipeService from 'src/services/recipeService';
 import 'src/styles.css';
+import { RecipeProductArray } from 'src/models/recipe_product_array';
+import { RecipeProduct } from 'src/models/recipe_product';
+import { ProductStatus } from 'src/models/ProductStatus';
 
 interface AddIngredientsCardProps {
   recipes: Recipe[];
   products: Product[];
   productMeasures: ProductMeasure[];
+  selectedRecipe: String;
+  setSelectedRecipe: React.Dispatch<React.SetStateAction<String>>;
+  recipeProducts: RecipeProduct[];
+  setRecipeProducts: React.Dispatch<React.SetStateAction<RecipeProduct[]>>;
 }
 const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
   recipes,
   products,
-  productMeasures
+  productMeasures,
+  selectedRecipe,
+  setSelectedRecipe,
+  recipeProducts,
+  setRecipeProducts
 }) => {
-  const [selectedRecipe, setSelectedRecipe] = useState<String>();
-
   const [formErrorRecipe, setFormErrorRecipe] = useState<boolean>(true);
 
-  const [ingredientForm, setIngredientForm] = useState<
-    {
-      id: number;
-      productId: number;
-      productMeasureId: number;
-      count: number;
-    }[]
-  >([{ id: Math.random(), productId: 0, productMeasureId: 0, count: 0 }]);
-
   const handleChangeRecipe = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSelectedRecipe(event.target.id);
+    setSelectedRecipe(event.target.value);
   };
 
   const onAddNextIngredient = () => {
     let newIngredient = {
-      id: Math.random(),
+      recipeProductId: 0,
       productId: 0,
       productMeasureId: 0,
-      count: 0
+      count: 0,
+      status: ProductStatus.New
     };
-    setIngredientForm((prevState) => {
+    setRecipeProducts((prevState) => {
       return [...prevState, newIngredient];
     });
-    console.log(ingredientForm);
   };
 
   const onDeleteIngredient = (key: number): void => {
-    const updatedIngredientKey = ingredientForm.filter(
-      (ingredient) => ingredient.id !== key
+    const updatedIngredient = recipeProducts.filter(
+      (ingredient) => ingredient.recipeProductId !== key
     );
-    setIngredientForm(updatedIngredientKey);
+    setRecipeProducts(updatedIngredient);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(selectedRecipe);
     if (selectedRecipe === undefined) {
       setFormErrorRecipe(false);
     } else {
       setFormErrorRecipe(true);
     }
 
-    const loginFromData = new FormData();
-    ingredientForm.forEach((ingredient) => {
-      loginFromData.append('productId', ingredient.productId.toString());
-      loginFromData.append(
-        'productMeasureId',
-        ingredient.productMeasureId.toString()
-      );
-      loginFromData.append('count', ingredient.count.toString());
-    });
+    const recipeProductArray: RecipeProductArray = {
+      recipeProductList: recipeProducts
+    };
 
     var result = await recipeService.postRecipeProduct(
-      loginFromData,
+      recipeProductArray,
       +selectedRecipe
     );
-    console.log(result);
+
     if (result == null) {
-      window.location.href = '/product/actions';
+      window.location.href = '/recipe/add/description';
     } else {
       alert(result);
     }
@@ -115,9 +108,10 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
             style={{ width: 690, margin: 20, marginTop: 5, marginBottom: 10 }}
             name="recipeId"
             onChange={handleChangeRecipe}
+            value={selectedRecipe}
           >
-            {recipes.map((recipe) => (
-              <MenuItem key={recipe.recipeId} value={recipe.name}>
+            {recipes?.map((recipe) => (
+              <MenuItem key={recipe.recipeId} value={recipe.recipeId}>
                 {recipe.name}
               </MenuItem>
             ))}
@@ -128,15 +122,15 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
             </div>
           )}
           <ul className="ingredients" style={{ padding: 0 }}>
-            {ingredientForm.map((ingredient, index) => (
+            {recipeProducts?.map((ingredient, index) => (
               <Ingredient
                 key={index}
                 index={index}
                 products={products}
                 productMeasures={productMeasures}
                 valueIngredient={ingredient}
-                ingredientForm={ingredientForm}
-                setIngredientForm={setIngredientForm}
+                recipeProducts={recipeProducts}
+                setRecipeProducts={setRecipeProducts}
                 onDeleteIngredient={onDeleteIngredient}
               />
             ))}

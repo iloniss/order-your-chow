@@ -38,7 +38,6 @@ class ProductService {
         }
       })
       .then((response: AxiosResponse) => {
-        console.log(response);
         return null;
       })
       .catch((reason: AxiosError) => {
@@ -63,7 +62,6 @@ class ProductService {
         return null;
       })
       .catch((reason: AxiosError) => {
-        console.log(reason.response);
         if (
           reason.response!.status === 400 ||
           reason.response!.status === 404

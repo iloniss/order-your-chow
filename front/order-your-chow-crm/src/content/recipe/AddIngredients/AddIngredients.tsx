@@ -7,11 +7,14 @@ import productService from 'src/services/productService';
 import recipeService from 'src/services/recipeService';
 import AddIngredientsCard from './AddIngredientsCard';
 import measureService from 'src/services/measureService';
+import { RecipeProduct } from 'src/models/recipe_product';
 
 const AddIngredients = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<ProductMeasure[]>([]);
+  const [recipeProducts, setRecipeProducts] = useState<RecipeProduct[]>();
+  const [selectedRecipe, setSelectedRecipe] = useState<String>('');
 
   const getRecipe = async () => {
     var result = await recipeService.getAll();
@@ -28,6 +31,17 @@ const AddIngredients = () => {
     setMeasures(result.data);
   };
 
+  const getRecipeProducts = async (selectedRecipe: Number) => {
+    if (+selectedRecipe !== 0) {
+      var result = await recipeService.getRecipeProducts(+selectedRecipe);
+      setRecipeProducts(result.data.recipeProductList);
+    }
+  };
+
+  useEffect(() => {
+    getRecipeProducts(+selectedRecipe);
+  }, [selectedRecipe]);
+
   useEffect(() => {
     getRecipe();
     getProduct();
@@ -40,6 +54,10 @@ const AddIngredients = () => {
         recipes={recipes}
         products={products}
         productMeasures={measures}
+        selectedRecipe={selectedRecipe}
+        setSelectedRecipe={setSelectedRecipe}
+        recipeProducts={recipeProducts}
+        setRecipeProducts={setRecipeProducts}
       />
     </Card>
   );
