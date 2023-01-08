@@ -71,10 +71,10 @@ namespace OrderYourChow.CRM.Controllers
 
         }
 
-        [HttpPut("{recipeId}/description")]
-        public async Task<ActionResult<bool>> AddDescription(int recipeId, [FromBody] RecipeDescriptionDTO recipeDescriptionDTO)
+        [HttpPut("description")]
+        public async Task<ActionResult<bool>> AddDescription([FromForm] RecipeDescriptionDTO recipeDescriptionDTO)
         {
-            var updateResult = await _recipeRepository.AddDescriptionAsync(recipeId, recipeDescriptionDTO);
+            var updateResult = await _recipeRepository.AddDescriptionAsync(recipeDescriptionDTO.RecipeId, recipeDescriptionDTO);
             if (!updateResult)
                 return NotFound();
 

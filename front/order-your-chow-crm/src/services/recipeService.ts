@@ -1,12 +1,15 @@
 import { AxiosError, AxiosResponse } from 'axios';
+import { AddDescription } from 'src/models/add_description';
 import { Recipe } from 'src/models/recipe';
 import { RecipeCategory } from 'src/models/recipe_category';
 import { RecipeProductArray } from 'src/models/recipe_product_array';
 import http from '../http-common';
 
 class RecipeService {
-  async getAll() {
-    return await http.get<Array<Recipe>>('/recipe');
+  async getAll(isActive: boolean) {
+    return await http.get<Array<Recipe>>('/recipe', {
+      params: { isActive: isActive }
+    });
   }
 
   async getAllRecipeCategories() {
@@ -28,6 +31,25 @@ class RecipeService {
       })
       .then((response: AxiosResponse<Recipe>) => {
         return response.data.recipeId;
+      })
+      .catch((reason: AxiosError) => {
+        if (reason.response!.status === 400) {
+          return reason.response.data.errors.Name;
+        } else {
+          return 'Nieoczekiwany problem.';
+        }
+      });
+  }
+
+  async putRecipeDescription(data: FormData) {
+    return await http
+      .put<AddDescription>('/recipe/description', data, {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        }
+      })
+      .then((response: AxiosResponse) => {
+        return null;
       })
       .catch((reason: AxiosError) => {
         if (reason.response!.status === 400) {

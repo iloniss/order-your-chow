@@ -2,7 +2,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Autocomplete, TextField, Button } from '@mui/material';
 import { FC, ChangeEvent, Key } from 'react';
 import { Product } from 'src/models/product';
-import { ProductStatus } from 'src/models/ProductStatus';
+import { ProductStatus } from 'src/models/product_status';
 import { ProductMeasure } from 'src/models/product_measure';
 import { RecipeProduct } from 'src/models/recipe_product';
 

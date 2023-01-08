@@ -28,14 +28,8 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
         //do zmiany
         public async Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive)
         {
-            if(isActive == null)
-            {
-                return _mapper.Map<List<RecipeListDTO>>(await _orderYourChowContext.DRecipes
-                    .ToListAsync());
-            }
-
             return _mapper.Map<List<RecipeListDTO>>(await _orderYourChowContext.DRecipes
-                .Where(recipe => recipe.Active == true)
+                .Where(recipe => isActive == null || (recipe.Active ?? false) == isActive)
                 .ToListAsync());
         }
 
@@ -79,12 +73,14 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             IEnumerable<RecipeProductDTO> updatedRecipeProducts, 
             IEnumerable<RecipeProductDTO> deletedRecipeProducts)
         {
+            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
             {
                 await AddRecipeProductsAsync(recipeId, newRecipeProducts);
                 await UpdateRecipeProductsAsync(updatedRecipeProducts);
                 await DeleteRecipeProductsAsync(deletedRecipeProducts);
+                recipe.Active = !string.IsNullOrEmpty(recipe.Description);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
                 return true;
@@ -138,7 +134,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             try
             {
                 recipe.Description = recipeDescriptionDTO.Description;
-                recipe.Active = true;
+                recipe.Active = await _orderYourChowContext.DRecipeProducts.Where(x => x.RecipeId == recipeId).AnyAsync();
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
 
