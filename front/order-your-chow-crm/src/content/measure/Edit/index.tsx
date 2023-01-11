@@ -1,18 +1,24 @@
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
+import PageHeader from '../../../components/PageHeader/index';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container } from '@mui/material';
 import Footer from 'src/components/Footer';
 import EditMeasure from './EditMeasure';
+import { TextHeader } from 'src/models/text_header';
 
 function ApplicationsTransactions() {
+  const textHeader: TextHeader = {
+    title: 'Edytuj jednostkę miary',
+    description: 'Uzupełnij ponizszy formularz, aby edytować miarę.',
+    isButton: false
+  };
   return (
     <>
       <Helmet>
         <title>Edit Measure</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader textHeader={textHeader} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid

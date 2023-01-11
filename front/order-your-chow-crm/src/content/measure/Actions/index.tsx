@@ -1,18 +1,26 @@
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
+import PageHeader from '../../../components/PageHeader/index';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container } from '@mui/material';
 import Footer from 'src/components/Footer';
 import Measures from './Measures';
+import { TextHeader } from 'src/models/text_header';
 
 function ApplicationsTransactions() {
+  const textHeader: TextHeader = {
+    title: 'Jednoski miar',
+    description: 'Jednostki miar składników.',
+    isButton: true,
+    buttonLink: '/measure/add',
+    buttonDescription: 'Dodaj miarę'
+  };
   return (
     <>
       <Helmet>
         <title>Measure</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader textHeader={textHeader} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
