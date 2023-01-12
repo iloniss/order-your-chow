@@ -68,7 +68,11 @@ const AddRecipeDescriptionCard: FC<AddRecipeDescriptionCardProps> = ({
 
     var result = await recipeService.putRecipeDescription(loginFromData);
 
-    alert(result);
+    if (result == null) {
+      window.location.href = '/recipe/list';
+    } else {
+      alert(result);
+    }
   };
 
   return (

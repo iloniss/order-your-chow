@@ -124,9 +124,9 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 _orderYourChowContext.DRecipeProducts.Remove(productsToDelete);
             }
         }
-        public async Task<bool> AddDescriptionAsync(int recipeId, RecipeDescriptionDTO recipeDescriptionDTO)
+        public async Task<bool> AddDescriptionAsync(RecipeDescriptionDTO recipeDescriptionDTO)
         {
-            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();
+            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeDescriptionDTO.RecipeId).SingleOrDefaultAsync();
             if (recipe == null)
                 return false;
 
@@ -134,7 +134,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             try
             {
                 recipe.Description = recipeDescriptionDTO.Description;
-                recipe.Active = await _orderYourChowContext.DRecipeProducts.Where(x => x.RecipeId == recipeId).AnyAsync();
+                recipe.Active = await _orderYourChowContext.DRecipeProducts.Where(x => x.RecipeId == recipeDescriptionDTO.RecipeId).AnyAsync();
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
 

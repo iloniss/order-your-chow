@@ -66,7 +66,7 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedRecipe === undefined) {
+    if (selectedRecipe === '') {
       setFormErrorRecipe(false);
     } else {
       setFormErrorRecipe(true);
