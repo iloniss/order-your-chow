@@ -1,19 +1,25 @@
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
+import PageHeader from '../../../components/PageHeader/index';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Grid, Container,} from '@mui/material';
+import { Grid, Container } from '@mui/material';
 import Footer from 'src/components/Footer';
 import AddProduct from './AddProduct';
+import { TextHeader } from 'src/models/text_header';
 
 function ApplicationsTransactions() {
-
+  const textHeader: TextHeader = {
+    title: 'Dodaj nowy produkt',
+    description:
+      'Uzupełnij ponizszy formularz, aby dodać nowy produkt do bazy dostępnych produktów.',
+    isButton: false
+  };
   return (
     <>
       <Helmet>
         <title>Add Product</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader textHeader={textHeader} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
@@ -24,7 +30,7 @@ function ApplicationsTransactions() {
           spacing={3}
         >
           <Grid item xs={12}>
-              <AddProduct/>
+            <AddProduct />
           </Grid>
         </Grid>
       </Container>

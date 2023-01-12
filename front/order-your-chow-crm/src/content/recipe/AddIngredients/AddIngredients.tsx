@@ -13,11 +13,11 @@ const AddIngredients = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<ProductMeasure[]>([]);
-  const [recipeProducts, setRecipeProducts] = useState<RecipeProduct[]>();
+  const [recipeProducts, setRecipeProducts] = useState<RecipeProduct[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<String>('');
 
   const getRecipe = async () => {
-    var result = await recipeService.getAll();
+    var result = await recipeService.getAll(false);
     setRecipes(result.data);
   };
 

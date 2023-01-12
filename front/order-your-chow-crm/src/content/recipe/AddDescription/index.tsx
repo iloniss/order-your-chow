@@ -3,19 +3,19 @@ import PageHeader from '../../../components/PageHeader/index';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container } from '@mui/material';
 import Footer from 'src/components/Footer';
-import EditMeasure from './EditMeasure';
+import AddRecipeDescription from './AddRecipeDescription';
 import { TextHeader } from 'src/models/text_header';
 
 function ApplicationsTransactions() {
   const textHeader: TextHeader = {
-    title: 'Edytuj jednostkę miary',
-    description: 'Uzupełnij ponizszy formularz, aby edytować miarę.',
+    title: 'Dodaj opis do wybranego przepisu',
+    description: 'Uzupełnij ponizszy formularz, aby dodać opis przepisu.',
     isButton: false
   };
   return (
     <>
       <Helmet>
-        <title>Edit Measure</title>
+        <title>Add Recipe</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader textHeader={textHeader} />
@@ -29,7 +29,7 @@ function ApplicationsTransactions() {
           spacing={3}
         >
           <Grid item xs={12}>
-            <EditMeasure />
+            <AddRecipeDescription />
           </Grid>
         </Grid>
       </Container>

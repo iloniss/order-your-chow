@@ -18,7 +18,7 @@ import recipeService from 'src/services/recipeService';
 import 'src/styles.css';
 import { RecipeProductArray } from 'src/models/recipe_product_array';
 import { RecipeProduct } from 'src/models/recipe_product';
-import { ProductStatus } from 'src/models/ProductStatus';
+import { ProductStatus } from 'src/models/product_status';
 
 interface AddIngredientsCardProps {
   recipes: Recipe[];
@@ -66,7 +66,7 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedRecipe === undefined) {
+    if (selectedRecipe === '') {
       setFormErrorRecipe(false);
     } else {
       setFormErrorRecipe(true);

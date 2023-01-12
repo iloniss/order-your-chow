@@ -15,7 +15,7 @@ namespace OrderYourChow.CORE.Contracts.CRM.Recipe
         Task<Models.CRM.Recipe.RecipeDTO> AddRecipeAsync(Models.CRM.Recipe.RecipeDTO recipeDTO);
         Task<bool> SaveProductsAsync(int recipeId, IEnumerable<RecipeProductDTO> newRecipeProducts,
             IEnumerable<RecipeProductDTO> updatedRecipeProducts, IEnumerable<RecipeProductDTO> deletedRecipeProducts);
-        Task<bool> AddDescriptionAsync(int recipeId, RecipeDescriptionDTO recipeDescriptionDTO);
+        Task<bool> AddDescriptionAsync(RecipeDescriptionDTO recipeDescriptionDTO);
         Task<bool> AddImagesAsync(int recipeId, List<string> images);
     }
 }

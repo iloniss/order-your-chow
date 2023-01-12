@@ -117,7 +117,7 @@ const AddRecipesCard: FC<AddRecipesCardProps> = ({ recipeCategories }) => {
     var result = await RecipeService.postRecipe(loginFromData);
 
     if (Number.isFinite(result)) {
-      window.location.href = 'recipe/add/ingredients?recipeId=' + result;
+      window.location.href = '/recipe/add/ingredients';
     } else {
       alert(result);
     }
