@@ -5,11 +5,11 @@ using OrderYourChow.Repositories.Repositories.CRM.Product;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductCategoryRepository")]
+    [Collection("ProductRepository")]
     public class AddProductCategoryTests : ProductCategoryBase
     {
         [Fact]
-        public async void AddProductCategoryAsync_ShouldAddProductCategory()
+        public async Task AddProductCategoryAsync_ShouldAddProductCategory()
         {
             // Arrange
             var productCategoryDTO = new ProductCategoryDTO
@@ -25,6 +25,9 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             // Assert
             result.Should().BeOfType<CreatedProductCategoryDTO>();
             entityAdded.Name.Should().Be(productCategoryDTO.Name);
+
+            // Clean
+            Clear();
         }
     }
 }

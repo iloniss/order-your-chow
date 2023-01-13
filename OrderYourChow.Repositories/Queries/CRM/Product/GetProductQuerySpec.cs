@@ -1,7 +1,6 @@
 ﻿using LinqKit;
 using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.DAL.CORE.Models;
-using System;
 using System.Linq.Expressions;
 
 namespace OrderYourChow.Repositories.Queries.CRM.Product
@@ -12,10 +11,7 @@ namespace OrderYourChow.Repositories.Queries.CRM.Product
         {
             var predicate = PredicateBuilder.New<SProduct>();
 
-            if(getProductQuery.ProductCategoryId != null)
-                predicate = predicate.And(product => product.CategoryId == getProductQuery.ProductCategoryId);
-
-            if (string.IsNullOrEmpty(getProductQuery.Name))
+            if (!string.IsNullOrEmpty(getProductQuery.Name))
                 predicate = predicate.And(product => product.Name == getProductQuery.Name);
 
             if(getProductQuery.ProductId != null)

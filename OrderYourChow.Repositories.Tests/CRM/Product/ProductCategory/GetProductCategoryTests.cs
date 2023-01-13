@@ -1,15 +1,16 @@
-﻿using OrderYourChow.CORE.Queries.CRM.Product;
+﻿using FluentAssertions;
+using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 using OrderYourChow.Repositories.Tests.Shared;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductCategoryRepository")]
+    [Collection("ProductRepository")]
     public class GetProductCategoryTests : ProductCategoryBase
     {
         [Fact]
-        public async void GetProductCategoryAsync_ShouldReturnProductCategory_WhenGivenProductCategoryId()
+        public async Task GetProductCategoryAsync_ShouldReturnProductCategory_WhenGivenProductCategoryId()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -23,15 +24,15 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.GetProductCategoryAsync(query);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Beverages", result.Name);
+            result.Should().NotBeNull();
+            result.Name.Should().Be("Beverages");
 
-            //Clean
+            // Clean
             Clear();
         }
 
         [Fact]
-        public async void GetProductCategoryAsync_ShouldNotReturnProductCategory_WhenGivenInvalidProductCategoryId()
+        public async Task GetProductCategoryAsync_ShouldNotReturnProductCategory_WhenGivenInvalidProductCategoryId()
         {
             // Arrange
             var options = new TestOrderYourChowContext().GetTestContextOptions();
@@ -46,11 +47,14 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.GetProductCategoryAsync(query);
 
             // Assert
-            Assert.Null(result);
+            result.Should().BeNull();
+
+            // Clean
+            Clear();
         }
 
         [Fact]
-        public async void GetProductCategoryAsync_ShouldReturnProductCategory_WhenGivenProductName()
+        public async Task GetProductCategoryAsync_ShouldReturnProductCategory_WhenGivenProductName()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -64,13 +68,16 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.GetProductCategoryAsync(query);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(productCategory.ProductCategoryId, result.ProductCategoryId);
-            Assert.Equal(productCategory.Name, result.Name);
+            result.Should().NotBeNull();
+            result.Name.Should().Be(productCategory.Name);
+            result.ProductCategoryId.Should().Be(productCategory.ProductCategoryId);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
-        public async void GetProductCategoryAsync_ShouldNotReturnProductCategory_WhenGivenInvalidProductCategoryName()
+        public async Task GetProductCategoryAsync_ShouldNotReturnProductCategory_WhenGivenInvalidProductCategoryName()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -84,7 +91,10 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.GetProductCategoryAsync(query);
 
             // Assert
-            Assert.Null(result);
+            result.Should().BeNull();
+
+            // Clean
+            Clear();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.ProductCategory
             var mockRepository = new Mock<IProductCategoryRepository>();
             mockRepository
                 .Setup(x => x.GetProductCategoriesAsync())
-                .ReturnsAsync(new List<ProductCategoryDTO>() { });
+                .ReturnsAsync(new List<ProductCategoryDTO>());
             var service = new ProductCategoryService(mockRepository.Object);
 
             //Act

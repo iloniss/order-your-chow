@@ -33,6 +33,7 @@ builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>
 builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
 
 builder.Services.AddSingleton(s => config.CreateMapper());

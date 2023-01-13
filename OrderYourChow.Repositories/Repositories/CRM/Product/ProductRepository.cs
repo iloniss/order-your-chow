@@ -3,10 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.Repositories.Queries.CRM.Product;
 using LinqKit;
@@ -41,7 +37,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
             }
         }
 
-        public async Task<List<ProductDTO>> GetProductsAsync() => 
+        public async Task<IList<ProductDTO>> GetProductsAsync() => 
             _mapper.Map<List<ProductDTO>>(await _orderYourChowContext.SProducts
                 .Include(x => x.Category)
                 .OrderBy(x => x.Name).ToListAsync());
@@ -93,6 +89,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
 
         public async Task<ProductDTO> GetProductAsync(GetProductQuery getProductQuery) => 
             _mapper.Map<ProductDTO>(await _orderYourChowContext.SProducts
+                .Include(x => x.Category)
                 .Where(GetProductQuerySpec.Filter(getProductQuery).Expand())
                 .SingleOrDefaultAsync());
 

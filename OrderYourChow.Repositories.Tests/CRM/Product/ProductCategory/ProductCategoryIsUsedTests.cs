@@ -1,14 +1,14 @@
-﻿using OrderYourChow.DAL.CORE.Models;
+﻿using FluentAssertions;
+using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductCategoryRepository")]
+    [Collection("ProductRepository")]
     public class ProductCategoryIsUsedTests : ProductCategoryBase
     {
-
         [Fact]
-        public async void ProductCategoryIsUsedAsync_ShouldReturnTrue_WhenGivenProductCategoryIdUsedInProduct()
+        public async Task ProductCategoryIsUsedAsync_ShouldReturnTrue_WhenGivenProductCategoryIdUsedInProduct()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -21,15 +21,15 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.ProductCategoryIsUsed(productCategory.ProductCategoryId);
 
             // Assert
-            Assert.True(result);
+            result.Should().BeTrue();
 
-            //Clean
-            OrderYourChowContext.Remove(OrderYourChowContext.SProducts.SingleOrDefault());
-            OrderYourChowContext.SaveChanges();
+            // Clean
+            OrderYourChowContext.RemoveRange(OrderYourChowContext.SProducts);
+            Clear();
         }
 
         [Fact]
-        public async void ProductCategoryIsUsedAsync_ShouldReturnFalse_WhenGivenProductCategoryIdNotUsedInProduct()
+        public async Task ProductCategoryIsUsedAsync_ShouldReturnFalse_WhenGivenProductCategoryIdNotUsedInProduct()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -41,7 +41,10 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.ProductCategoryIsUsed(productCategory.ProductCategoryId);
 
             // Assert
-            Assert.False(result);
+            result.Should().BeFalse();
+
+            // Clean
+            Clear();
         }
     }
 }

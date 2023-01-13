@@ -33,7 +33,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.Product
             var service = new ProductService(mockRepository.Object, mockFileProcessor.Object, mockFileProcessorValidator.Object);
 
             //Act
-            var result = await service.AddProduct(null, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
+            var result = await service.AddProduct(new Mock<IFormFile>().Object, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
 
             // Assert
             result.Should().BeOfType<ErrorProductDTO>();
@@ -62,7 +62,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.Product
             var service = new ProductService(mockRepository.Object, mockFileProcessor.Object, mockFileProcessorValidator.Object);
 
             //Act
-            var result = await service.AddProduct(null, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
+            var result = await service.AddProduct(new Mock<IFormFile>().Object, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
 
             // Assert
             result.Should().BeOfType<ErrorProductDTO>();
@@ -91,7 +91,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.Product
             var service = new ProductService(mockRepository.Object, mockFileProcessor.Object, mockFileProcessorValidator.Object);
 
             //Act
-            var result = await service.AddProduct(null, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
+            var result = await service.AddProduct(new Mock<IFormFile>().Object, new AddProductDTO() { Name = "Coffee", ProductCategoryId = 2 });
 
             // Assert
             result.Should().BeOfType<CreatedProductDTO>();

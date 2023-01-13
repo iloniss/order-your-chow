@@ -25,10 +25,10 @@ namespace OrderYourChow.CRM.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ProductDTO>> GetProduct(GetProductQuery getProductQuery) => 
+        public async Task<ActionResult<ProductDTO>> GetProduct([FromQuery]GetProductQuery getProductQuery) => 
             Ok(await _productService.GetProduct(getProductQuery));
 
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<ActionResult<List<ProductDTO>>> GetProducts() => 
             Ok(await _productService.GetProducts());
 

@@ -9,7 +9,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.ProductCategory
     public class DeleteProductCategoryTests
     {
         [Fact]
-        public async Task UpdateProductCategory_ShouldDeleteProductCategory_WhenProductCategoryExitsAndIsNotUsed()
+        public async Task DeleteProductCategory_ShouldDeleteProductCategory_WhenProductCategoryExitsAndIsNotUsed()
         {
             // Arrange
             var mockRepository = new Mock<IProductCategoryRepository>();
@@ -29,7 +29,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.ProductCategory
         }
 
         [Fact]
-        public async Task UpdateProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryNotExits()
+        public async Task DeleteProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryNotExits()
         {
             // Arrange
             var mockRepository = new Mock<IProductCategoryRepository>();
@@ -50,7 +50,7 @@ namespace OrderYourChow.CORE.Tests.Services.CRM.Product.ProductCategory
         }
 
         [Fact]
-        public async Task UpdateProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryIsUsed()
+        public async Task DeleteProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryIsUsed()
         {
             // Arrange
             var mockRepository = new Mock<IProductCategoryRepository>();

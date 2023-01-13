@@ -27,7 +27,6 @@ namespace OrderYourChow.Integration.Tests.CRM
             string oldName, string newName)
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             SProductCategory productCategory = new()
@@ -47,13 +46,15 @@ namespace OrderYourChow.Integration.Tests.CRM
 
             // Assert
             response.Should().HaveStatusCode(System.Net.HttpStatusCode.NoContent);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task UpdateProductCategory_ShouldNotUpdateProductCategory_WhenProductCategoryNotExits()
         {
             // Arrange
-            Clear();
             var formData = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("Name", "Beverages"),
@@ -68,13 +69,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
             var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
             result["message"].Should().Be(CORE.Const.CRM.Product.NotFoundProductCategory);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task UpdateProductCategory_ShouldNotUpdateProductCategory_WhenProductCategoryNewNameExits()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             SProductCategory productCategory = new()
@@ -98,13 +101,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
             var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
             result["message"].Should().Be(CORE.Const.CRM.Product.ExistedProductCategory);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task DeleteProductCategory_ShouldDeleteProductCategory_WhenProductCategoryExitsAndIsValid()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             SProductCategory productCategory = new()
@@ -119,14 +124,15 @@ namespace OrderYourChow.Integration.Tests.CRM
 
             // Assert
             response.Should().HaveStatusCode(System.Net.HttpStatusCode.NoContent);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task DeleteProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryNotExits()
         {
             // Arrange
-            Clear();
-
             //Act
             var response = await _httpClient.DeleteAsync(_url + "/" + 3.ToString());
 
@@ -135,13 +141,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
             var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
             result["message"].Should().Be(CORE.Const.CRM.Product.NotFoundProductCategory);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task DeleteProductCategory_ShouldNotDeleteProductCategory_WhenProductCategoryIsUsed()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             SProductCategory productCategory = new()
@@ -163,14 +171,13 @@ namespace OrderYourChow.Integration.Tests.CRM
 
             //Clean
             context.Remove(context.SProducts.SingleOrDefault());
-            context.SaveChanges();
+            Clear();
         }
 
         [Fact]
         public async Task AddProductCategory_ShouldNotAddProductCategory_WhenProductCategoryExists()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             context.SProductCategories.Add(new SProductCategory { Name = "Beverages" });
@@ -188,13 +195,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
             var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
             result["message"].Should().Be(CORE.Const.CRM.Product.ExistedProductCategory);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task AddProductCategory_ShouldAddProductCategory_WhenProductCategoryNotExists()
         {
             // Arrange
-            Clear();
             var formData = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("Name", "Beverages")
@@ -205,13 +214,15 @@ namespace OrderYourChow.Integration.Tests.CRM
 
             // Assert
             response.Should().HaveStatusCode(System.Net.HttpStatusCode.Created);
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task GetProductCategories_ShouldReturnProductCategories_WhenProductCategoriesExist()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             context.SProductCategories.Add(new SProductCategory { Name = "Beverages" });
@@ -229,13 +240,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             result.Should().NotBeEmpty();
             result.Should().HaveCount(3);
             result.Select(x => x.Name).Should().BeInAscendingOrder();
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task GetProductCategories_ShouldNotReturnProductCategories_WhenProductCategoriesNotExist()
         {
             // Arrange
-            Clear();
             // Act
             var response = await _httpClient.GetAsync(_url);
 
@@ -244,13 +257,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
             var result = JsonConvert.DeserializeObject<IList<ProductCategoryDTO>>(await response.Content.ReadAsStringAsync());
             result.Should().BeEmpty();
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task GetProductCategory_ShouldNotReturnProductCategory_WhenProductCategoryNotExits()
         {
             // Arrange
-            Clear();
             // Act
             var response = await _httpClient.GetAsync(_url + "/" + 3.ToString());
 
@@ -258,13 +273,15 @@ namespace OrderYourChow.Integration.Tests.CRM
             response.Should().HaveStatusCode(System.Net.HttpStatusCode.NoContent);
             var result = JsonConvert.DeserializeObject<ProductCategoryDTO>(await response.Content.ReadAsStringAsync());
             result.Should().BeNull();
+
+            // Clean
+            Clear();
         }
 
         [Fact]
         public async Task GetProductCategory_ShouldReturnProductCategory_WhenProductCategoryExits()
         {
             // Arrange
-            Clear();
             using var scope = _webAppFactory.Services.CreateScope();
             OrderYourChowContext context = scope.ServiceProvider.GetRequiredService<OrderYourChowContext>();
             SProductCategory productCategory = new()
@@ -273,6 +290,7 @@ namespace OrderYourChow.Integration.Tests.CRM
             };
             context.SProductCategories.Add(productCategory);
             context.SaveChanges();
+
             // Act
             var response = await _httpClient.GetAsync(_url + "/" + productCategory.ProductCategoryId.ToString());
 
@@ -282,6 +300,9 @@ namespace OrderYourChow.Integration.Tests.CRM
             var result = JsonConvert.DeserializeObject<ProductCategoryDTO>(await response.Content.ReadAsStringAsync());
             result.Should().NotBeNull();
             result.Name.Should().Be(productCategory.Name);
+
+            // Clean
+            Clear();
         }
 
         protected void Clear()

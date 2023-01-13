@@ -1,14 +1,15 @@
-﻿using OrderYourChow.CORE.Models.CRM.Product;
+﻿using FluentAssertions;
+using OrderYourChow.CORE.Models.CRM.Product;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductCategoryRepository")]
+    [Collection("ProductRepository")]
     public class DeleteProductCategoryTests : ProductCategoryBase
     {
         [Fact]
-        public async void DeleteProductCategoryAsync_ShouldDeleteProductCategory_WhenGivenProductCategoryId()
+        public async Task DeleteProductCategoryAsync_ShouldDeleteProductCategory_WhenGivenValidProductCategoryId()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -20,11 +21,11 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.DeleteProductCategoryAsync(productCategory.ProductCategoryId);
 
             // Assert
-            Assert.IsType<DeletedProductCategoryDTO>(result);
+            result.Should().BeOfType<DeletedProductCategoryDTO>();
         }
 
         [Fact]
-        public async void DeleteProductCategoryAsync_ShouldNotDeleteProductCategory_WhenGivenInvalidProductCategoryId()
+        public async Task DeleteProductCategoryAsync_ShouldNotDeleteProductCategory_WhenGivenInvalidProductCategoryId()
         {
             // Arrange
             SProductCategory productCategory = new() { Name = "Beverages" };
@@ -36,7 +37,11 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
             var result = await repository.DeleteProductCategoryAsync(productCategory.ProductCategoryId + 1);
 
             // Assert
-            Assert.IsType<EmptyProductCategoryDTO>(result);
+            result.Should().BeOfType<EmptyProductCategoryDTO>();
+            (result as EmptyProductCategoryDTO).Message.Should().Be(CORE.Const.CRM.Product.NotFoundProductCategory);
+
+            // Clean
+            Clear();
         }
     }
 }

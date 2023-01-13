@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
 using OrderYourChow.CORE.Queries.CRM.Product;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CORE.Services.CRM.Product
 {
@@ -40,7 +38,7 @@ namespace OrderYourChow.CORE.Services.CRM.Product
         public async Task<ProductDTO> GetProduct(GetProductQuery getProductQuery) => 
             await _productRepository.GetProductAsync(getProductQuery);
 
-        public async Task<List<ProductDTO>> GetProducts() =>
+        public async Task<IList<ProductDTO>> GetProducts() =>
             await _productRepository.GetProductsAsync();
 
         public async Task<ProductDTO> DeleteProduct(int productId)

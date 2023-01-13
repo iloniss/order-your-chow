@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestImages\69c42771-522b-4c33-b550-99685ec8b898.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestImages\69c42771-522b-4c33-b550-99685ec8b898.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.12" />
@@ -27,6 +39,12 @@
   <ItemGroup>
     <ProjectReference Include="..\OrderYourChow.CRM\OrderYourChow.CRM.csproj" />
     <ProjectReference Include="..\OrderYourChow.DAL.CORE\OrderYourChow.DAL.CORE.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

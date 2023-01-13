@@ -8,7 +8,7 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
     public class AddProductTests : ProductBase
     {
         [Fact]
-        public async void AddProductAsync_ShouldAddProduct()
+        public async Task AddProductAsync_ShouldAddProduct()
         {
             //Arrange
             var image = Guid.NewGuid().ToString();
@@ -30,6 +30,9 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
             entityAdded.Name.Should().Be("Coffee");
             entityAdded.Image.Should().Be(image);
             entityAdded.Category.Should().NotBeNull();
+
+            // Clean
+            Clear();
         }
     }
 }

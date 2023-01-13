@@ -24,7 +24,7 @@ namespace OrderYourChow.CRM.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 500)]
+        //[ResponseCache(Duration = 500)] //TODO
         public async Task<ActionResult<IList<ProductCategoryDTO>>> GetCategories() => 
             Ok(await _productCategoryService.GetProductCategories());
 
