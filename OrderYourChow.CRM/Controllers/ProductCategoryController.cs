@@ -1,70 +1,61 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
+using OrderYourChow.CORE.Queries.CRM.Product;
 
 namespace OrderYourChow.CRM.Controllers
 {
     public class ProductCategoryController : BaseController
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
-        public ProductCategoryController(IProductCategoryRepository productCategoryRepository)
+        private readonly IProductCategoryService _productCategoryService;
+        public ProductCategoryController(IProductCategoryService productCategoryService)
         {
-            _productCategoryRepository = productCategoryRepository;
+            _productCategoryService = productCategoryService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductCategoryDTO>> AddCategory([FromForm] ProductCategoryDTO productCategoryDTO)
+        public async Task<IActionResult> AddCategory([FromForm] ProductCategoryDTO productCategoryDTO)
         {
-            var existCategory = await _productCategoryRepository.GetProductCategoryByNameAsync(productCategoryDTO.Name);
+            var result = await _productCategoryService.AddProductCategory(productCategoryDTO);
 
-            if (existCategory == null)
-            {
-                return StatusCode(StatusCodes.Status201Created, await _productCategoryRepository.AddProductCategoryAsync(productCategoryDTO));
-            }
-            return Conflict("Kategoria, którą próbujesz dodać już istnieje.");
-
+            if(result is ErrorProductCategoryDTO)
+                return BadRequest(new { (result as ErrorProductCategoryDTO).Message });
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 500)]
-        public async Task<ActionResult<List<ProductCategoryDTO>>> GetCategories()
-        {
-            return Ok(await _productCategoryRepository.GetProductCategoriesAsync());
-        }
+        //[ResponseCache(Duration = 500)] //TODO
+        public async Task<ActionResult<IList<ProductCategoryDTO>>> GetCategories() => 
+            Ok(await _productCategoryService.GetProductCategories());
 
         [HttpGet("{productCategoryId}")]
-        public async Task<ActionResult<ProductCategoryDTO>> GetCategory(int productCategoryId)
-        {
-            return Ok(await _productCategoryRepository.GetProductCategoryByIdAsync(productCategoryId));
-        }
+        public async Task<ActionResult<ProductCategoryDTO>> GetCategory(int productCategoryId) => 
+            Ok(await _productCategoryService.GetProductCategory(new GetProductCategoryQuery(productCategoryId: productCategoryId)));
+
+
 
         [HttpDelete("{productCategoryId}")]
-        public async Task<ActionResult> DeleteCategory(int productCategoryId)
+        public async Task<IActionResult> DeleteCategory(int productCategoryId)
         {
-            var deleteResult = await _productCategoryRepository.DeleteProductCategoryAsync(productCategoryId);
+            var result = await _productCategoryService.DeleteProductCategory(productCategoryId);
 
-            if (deleteResult is EmptyProductCategoryDTO)
-                return NotFound();
-
-            if (deleteResult is ErrorProductCategoryDTO)
-                return BadRequest();
-
+            if (result is EmptyProductCategoryDTO)
+                return NotFound(new { (result as EmptyProductCategoryDTO).Message } );
+            else if (result is ErrorProductCategoryDTO)
+                return BadRequest(new { (result as ErrorProductCategoryDTO).Message });
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPut("{productCategoryId}")]
-        public async Task<ActionResult<ProductCategoryDTO>> UpdateCategory(int productCategoryId, [FromForm] ProductCategoryDTO productCategoryDTO)
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromForm] ProductCategoryDTO productCategoryDTO)
         {
-            var existCategory = await _productCategoryRepository.GetProductCategoryByNameAsync(productCategoryDTO.Name);
+            var result = await _productCategoryService.UpdateProductCategory(productCategoryDTO);
 
-            if(existCategory == null)
-            {
-                var updateResult = await _productCategoryRepository.UpdateProductCategoryAsync(productCategoryId, productCategoryDTO);
-                if (updateResult is EmptyProductCategoryDTO)
-                    return NotFound();
-                return Ok(updateResult);
-            }
-            return Conflict("Kategoria, którą próbujesz dodać już istnieje.");
+            if (result is ErrorProductCategoryDTO)
+                return BadRequest(new { (result as ErrorProductCategoryDTO).Message });
+            else if (result is EmptyProductCategoryDTO)
+                return NotFound(new { (result as EmptyProductCategoryDTO).Message });
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }

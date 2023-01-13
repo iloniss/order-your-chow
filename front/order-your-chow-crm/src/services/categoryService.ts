@@ -46,19 +46,16 @@ class CategoryService {
       });
   }
 
-  async putCategory(productCategoryId: number, data: FormData) {
+  async putCategory(data: FormData) {
     return await http
-      .put<ProductCategory>(
-        '/productCategory/' + productCategoryId.toString(),
-        data
-      )
+      .put<ProductCategory>('/productCategory', data)
       .then((response: AxiosResponse) => {
         return null;
       })
       .catch((reason: AxiosError) => {
         if (reason.response!.status === 400) {
           return reason.response.data.errors.Name;
-        } else if (reason.response!.status === 409) {
+        } else if (reason.response!.status === 404) {
           return reason.response.data;
         } else {
           return 'Nieoczekiwany problem.';

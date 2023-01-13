@@ -21,5 +21,8 @@
     <ProjectReference Include="..\OrderYourChow.DAL.CORE\OrderYourChow.DAL.CORE.csproj" />
     <ProjectReference Include="..\OrderYourChow.Repositories\OrderYourChow.Repositories.csproj" />
   </ItemGroup>
-
+	
+  <ItemGroup>
+	<InternalsVisibleTo Include="MyTestProject" />
+  </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Contracts.Services;
 using OrderYourChow.CORE.Services;
+using OrderYourChow.CORE.Services.CRM.Product;
 using OrderYourChow.CORE.Validators.CRM.Base;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 using OrderYourChow.Repositories.Repositories.CRM.Recipe;
@@ -31,7 +32,8 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
 builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
-
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
 
 builder.Services.AddSingleton(s => config.CreateMapper());
@@ -85,3 +87,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

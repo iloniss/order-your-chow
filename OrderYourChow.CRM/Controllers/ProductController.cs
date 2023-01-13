@@ -1,98 +1,62 @@
-﻿using FileProcessor.CORE.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
-using System.Collections.Generic;
+using OrderYourChow.CORE.Queries.CRM.Product;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CRM.Controllers
 {
     public class ProductController : BaseController
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IFileProcessor _fileProcessor;
-        private readonly IFileProcessorValidator _fileProcessorValidator;
-        public ProductController(IProductRepository productRepository, IFileProcessor fileProcessor,
-            IFileProcessorValidator fileProcessorValidator)
+        private readonly IProductService _productService;
+        public ProductController(IProductService productService)
         {
-            _productRepository = productRepository;
-            _fileProcessor = fileProcessor;
-            _fileProcessorValidator = fileProcessorValidator;
+            _productService = productService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<AddProductDTO>> Add([Required] IFormFile ImageFile, [FromForm] AddProductDTO productDTO)
+        public async Task<IActionResult> AddProduct([Required] IFormFile imageFile, [FromForm] AddProductDTO productDTO)
         {
-            if (!_fileProcessorValidator.IsImageFile(ImageFile))
-                return BadRequest("Nieprawidłowy format pliku.");
+            var result = await _productService.AddProduct(imageFile, productDTO);
 
-            var existProduct = await _productRepository.GetProductByNameAsync(productDTO.Name);
-
-            if (existProduct == null)
-            {
-                productDTO.Image = await _fileProcessor.SaveFileFromWebsite(ImageFile, "ImageProduct");
-
-                return StatusCode(StatusCodes.Status201Created, await _productRepository.AddProductAsync(productDTO));
-            }
-
-            return Conflict("Produkt, który próbujesz dodać już istnieje."); 
-        }
-
-        [HttpGet("getByName/{name}")]
-        public async Task<ActionResult<AddProductDTO>> GetByName(string name)
-        {
-            return Ok(await _productRepository.GetProductByNameAsync(name));
-        }
-
-        [HttpGet("getById/{productId}")]
-        public async Task<ActionResult<AddProductDTO>> GetById(int productId)
-        {
-            return Ok(await _productRepository.GetProductByIdAsync(productId));
+            if(result is ErrorProductDTO)
+                return BadRequest(new { (result as ErrorProductDTO).Message });
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductDTO>>> Get()
-        {
-            return Ok(await _productRepository.GetProductsAsync());
-        }
+        public async Task<ActionResult<ProductDTO>> GetProduct([FromQuery]GetProductQuery getProductQuery) => 
+            Ok(await _productService.GetProduct(getProductQuery));
+
+        [HttpGet("list")]
+        public async Task<ActionResult<List<ProductDTO>>> GetProducts() => 
+            Ok(await _productService.GetProducts());
 
 
         [HttpDelete("{productId}")]
-        public async Task<ActionResult> Delete(int productId)
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
-            var deleteResult = await _productRepository.DeleteProductAsync(productId);
+            var result = await _productService.DeleteProduct(productId);
 
-            if (deleteResult is ErrorAddProductDTO)
-                return BadRequest();
-
-            if (deleteResult is EmptyAddProductDTO)
-                return NotFound();
-
+            if (result is ErrorProductDTO)
+                return BadRequest(new { (result as ErrorProductDTO).Message });
+            else if (result is EmptyProductDTO)
+                return NotFound(new { (result as EmptyProductDTO).Message });
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPut("{productId}")]
-        public async Task<ActionResult<AddProductDTO>> Update(int productId, IFormFile ImageFile, [FromForm] AddProductDTO productDTO)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct(IFormFile imageFile, [FromForm] ProductDTO productDTO)
         {
-            var existProduct = await _productRepository.GetProductByNameAsync(productDTO.Name);
+            var result = await _productService.UpdateProduct(imageFile, productDTO);
 
-            if (existProduct == null || existProduct.ProductId == productId)
+            if(result is ErrorProductDTO)
             {
-                if (ImageFile != null && _fileProcessorValidator.IsImageFile(ImageFile))
-                {
-                    _fileProcessor.DeleteFile(productDTO.Image, "ImageProduct");
-                    productDTO.Image = await _fileProcessor.SaveFileFromWebsite(ImageFile, "ImageProduct");
-                }
-
-                var updateResult = await _productRepository.UpdateProductAsync(productId, productDTO);
-                if (updateResult is EmptyAddProductDTO)
-                    return NotFound("Nie znaleziono produktu.");
-
-                return Ok(updateResult);
+                return BadRequest(new { (result as ErrorProductDTO).Message });
             }
-            return Conflict("Produkt, który próbujesz dodać już istnieje.");
+            else if (result is EmptyProductDTO)
+                return NotFound(new { (result as EmptyProductDTO).Message });
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }
