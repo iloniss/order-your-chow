@@ -6,6 +6,7 @@ import CategoryService from './../../../services/categoryService';
 import EditProductCard from './EditProductCard';
 import { AddProduct } from 'src/models/add_product';
 import ProductService from 'src/services/productService';
+import { ProductQuery } from 'src/models/product/query/product_query';
 
 const EditProduct = () => {
   const [productCategories, setProductCategories] = useState<ProductCategory[]>(
@@ -25,7 +26,9 @@ const EditProduct = () => {
   };
 
   const getProduct = async (productId: number) => {
-    var result = await ProductService.getProductById(productId);
+    var result = await ProductService.getProduct({
+      productId: productId
+    } as ProductQuery);
     setproductData(result.data);
   };
 
