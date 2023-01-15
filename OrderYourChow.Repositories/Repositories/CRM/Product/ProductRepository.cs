@@ -95,6 +95,6 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
 
         public async Task<bool> ProductIsUsed(int productId) => 
             await _orderYourChowContext.DRecipeProducts
-                .Where(x => x.ProductId == productId).AnyAsync();
+                .AnyAsync(x => x.ProductId == productId);
     }
 }

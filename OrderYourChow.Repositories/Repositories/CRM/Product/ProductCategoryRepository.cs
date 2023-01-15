@@ -3,13 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.Repositories.Queries.CRM.Product;
 using LinqKit;
+using OrderYourChow.CORE.Queries.CRM.Product;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Product
 {
@@ -91,6 +87,6 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
         }
 
         public async Task<bool> ProductCategoryIsUsed(int productCategoryId) => 
-            await _orderYourChowContext.SProducts.Where(x => x.CategoryId == productCategoryId).AnyAsync();
+            await _orderYourChowContext.SProducts.AnyAsync(x => x.CategoryId == productCategoryId);
     }
 }

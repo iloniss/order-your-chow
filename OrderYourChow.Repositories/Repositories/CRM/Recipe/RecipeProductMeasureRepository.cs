@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Models.CRM.Recipe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using OrderYourChow.CORE.Queries.CRM.Recipe;
+using LinqKit;
+using OrderYourChow.Repositories.Queries.CRM.Recipe;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 {
@@ -20,7 +19,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             _mapper = mapper;
         }
 
-        public async Task<RecipeProductMeasureDTO> AddProductMeasureAsync(RecipeProductMeasureDTO recipeProductMeasureDTO)
+        public async Task<RecipeProductMeasureDTO> AddRecipeProductMeasureAsync(RecipeProductMeasureDTO recipeProductMeasureDTO)
         {
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -29,7 +28,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 await _orderYourChowContext.SProductMeasures.AddAsync(recipeProductMeasure);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return _mapper.Map<RecipeProductMeasureDTO>(recipeProductMeasure);
+                return new CreatedRecipeProductMeasureDTO();
             }
             catch (Exception)
             {
@@ -37,26 +36,18 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             }
         }
 
-        public async Task<List<RecipeProductMeasureDTO>> GetProductMeasureAsync()
-        {
-            return _mapper.Map<List<RecipeProductMeasureDTO>>(await _orderYourChowContext.SProductMeasures.OrderBy(x => x.Name).ToListAsync());
-        }
+        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasureAsync() => 
+            _mapper.Map<List<RecipeProductMeasureDTO>>(await _orderYourChowContext.SProductMeasures.OrderBy(x => x.Name).ToListAsync());
 
-        public async Task<RecipeProductMeasureDTO> GetProductMeasureByIdAsync(int recipeProductMeasureId)
-        {
-            return _mapper.Map<RecipeProductMeasureDTO>(await _orderYourChowContext.SProductMeasures.Where(x => x.ProductMeasureId == recipeProductMeasureId).SingleOrDefaultAsync());
-        }
+        public async Task<RecipeProductMeasureDTO> GetRecipeProductMeasureAsync(GetRecipeProductMeasureQuery getRecipeProductMeasureQuery) => 
+            _mapper.Map<RecipeProductMeasureDTO>(await _orderYourChowContext.SProductMeasures.Where(GetRecipeProductMeasureQuerySpec.Filter(getRecipeProductMeasureQuery).Expand())
+                .SingleOrDefaultAsync());
 
-        public async Task<RecipeProductMeasureDTO> DeleteProductMeasureAsync(int recipeProductMeasureId)
+        public async Task<RecipeProductMeasureDTO> DeleteRecipeProductMeasureAsync(int recipeProductMeasureId)
         {
             var recipeProductMeasure = await _orderYourChowContext.SProductMeasures.Where(x => x.ProductMeasureId == recipeProductMeasureId).SingleOrDefaultAsync();
             if (recipeProductMeasure == null)
-                return new EmptyRecipeProductMeasureDTO();
-
-            bool isUsed = await _orderYourChowContext.DRecipeProducts.Where(x=>x.ProductMeasureId == recipeProductMeasureId).AnyAsync();
-
-            if (isUsed)
-                return new ErrorRecipeProductMeasureDTO();
+                return new EmptyRecipeProductMeasureDTO(CORE.Const.CRM.Recipe.NotFoundRecipeProductMeasure);
 
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -64,7 +55,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 _orderYourChowContext.Remove(recipeProductMeasure);
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return null;
+                return new DeletedRecipeProductMeasureDTO();
             }
             catch (Exception)
             {
@@ -72,11 +63,13 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             }
         }
 
-        public async Task<RecipeProductMeasureDTO> UpdateProductMeasureAsync(int recipeProductMeasureId, RecipeProductMeasureDTO recipeProductMeasureDTO)
+        public async Task<RecipeProductMeasureDTO> UpdateRecipeProductMeasureAsync(RecipeProductMeasureDTO recipeProductMeasureDTO)
         {
-            var recipeProductMeasure = await _orderYourChowContext.SProductMeasures.Where(x => x.ProductMeasureId == recipeProductMeasureId).SingleOrDefaultAsync();
+            var recipeProductMeasure = await _orderYourChowContext.SProductMeasures
+                .Where(x => x.ProductMeasureId == recipeProductMeasureDTO.ProductMeasureId)
+                .SingleOrDefaultAsync();
             if (recipeProductMeasure == null)
-                return new EmptyRecipeProductMeasureDTO();
+                return new EmptyRecipeProductMeasureDTO(CORE.Const.CRM.Recipe.NotFoundRecipeProductMeasure);
 
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
@@ -85,12 +78,15 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
 
-                return _mapper.Map<RecipeProductMeasureDTO>(recipeProductMeasure);
+                return new UpdatedRecipeProductMeasureDTO();
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public async Task<bool> RecipeProductMeasureIsUsed(int recipeProductMeasureId) => 
+            await _orderYourChowContext.DRecipeProducts.AnyAsync(x => x.ProductMeasureId == recipeProductMeasureId);
     }
 }
