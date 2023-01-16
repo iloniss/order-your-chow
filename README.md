@@ -1,5 +1,5 @@
 # order-your-chow
-Application to planning diet. It contains API for application and service of application in .NET 5. Front-end panel service of application in React.
+Application to planning diet. It contains API for application and service of application in .NET 6. Front-end panel service of application in React TypeScript.
 
 ## Migrations
 
