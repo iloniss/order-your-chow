@@ -4,11 +4,6 @@ using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OrderYourChow.CORE.Enums;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 {
@@ -66,6 +61,30 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             {
                 throw;
             }
+        }
+
+        public async Task<RecipeDTO> DeleteRecipeAsync(int recipeId)
+        {
+            var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync();
+            var recipeProducts = await _orderYourChowContext.DRecipeProducts.Where(x => x.RecipeId == recipeId).ToListAsync();
+            if(recipe == null)
+                return new EmptyRecipeDTO(CORE.Const.CRM.Recipe.NotFoundRecipe);
+
+            string image = recipe.MainImage;
+            using var tran = _orderYourChowContext.Database.BeginTransaction();
+            try
+            {
+                _orderYourChowContext.RemoveRange(recipeProducts);
+                _orderYourChowContext.Remove(recipe);
+                await _orderYourChowContext.SaveChangesAsync();
+                await tran.CommitAsync();
+                return new DeletedRecipeDTO() { MainImage = image };
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+
         }
 
         public async Task<bool> SaveProductsAsync(int recipeId, 
@@ -171,6 +190,14 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             {
                 throw;
             }
+        }
+
+        public async Task<bool> RecipeIsUsed(int recipeId)
+        {
+            return await _orderYourChowContext.DRecipeFavourites.AnyAsync(x => x.RecipeId == recipeId) || 
+                await _orderYourChowContext.DDietDayRecipes.AnyAsync(x => x.RecipeId == recipeId) || 
+                await _orderYourChowContext.DPlanRecipes.AnyAsync(x => x.RecipeId == recipeId) ||
+                await _orderYourChowContext.DShoppingLists.AnyAsync(x => x.RecipeId == recipeId);
         }
 
     }

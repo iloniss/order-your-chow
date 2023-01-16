@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import { ChangeEvent, FC, useState } from 'react';
 import { AddDescription } from 'src/models/add_description';
-import { Recipe } from 'src/models/recipe';
+import { RecipesList } from 'src/models/recipe/recipes_list';
 import recipeService from 'src/services/recipeService';
 import 'src/styles.css';
 
 interface AddRecipeDescriptionCardProps {
-  recipes: Recipe[];
+  recipes: RecipesList[];
 }
 const AddRecipeDescriptionCard: FC<AddRecipeDescriptionCardProps> = ({
   recipes

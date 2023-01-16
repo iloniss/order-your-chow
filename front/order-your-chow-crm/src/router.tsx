@@ -32,6 +32,7 @@ const AddRecipe = Loader(lazy(() => import('src/content/recipe/Add')));
 const AddRecipeDescription = Loader(
   lazy(() => import('src/content/recipe/AddDescription'))
 );
+const Recipes = Loader(lazy(() => import('src/content/recipe/Actions')));
 // Components
 
 // Status
@@ -170,6 +171,10 @@ const routes: PartialRouteObject[] = [
       {
         path: 'add/info',
         element: <AddRecipe />
+      },
+      {
+        path: 'list',
+        element: <Recipes />
       }
     ]
   },

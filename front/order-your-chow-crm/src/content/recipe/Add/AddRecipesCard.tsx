@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import 'src/styles.css';
 import MenuItem from '@mui/material/MenuItem';
-import { RecipeCategory } from 'src/models/recipe_category';
+import { RecipeCategory } from 'src/models/recipe/recipe_category';
 import { useState, FC, ChangeEvent } from 'react';
 import RecipeService from 'src/services/recipeService';
 import { AddRecipe } from 'src/models/add_recipe';

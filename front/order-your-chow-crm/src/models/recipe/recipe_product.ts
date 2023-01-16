@@ -1,4 +1,4 @@
-import { ProductStatus } from './product_status';
+import { ProductStatus } from '../product_status';
 
 export interface RecipeProduct {
   recipeProductId: number;

@@ -1,9 +1,11 @@
-﻿using OrderYourChow.CORE.Models.Shared.Recipe;
+﻿using OrderYourChow.CORE.Models.CRM.Recipe;
+using OrderYourChow.CORE.Models.Shared.Recipe;
 
 namespace OrderYourChow.CORE.Contracts.Services
 {
     public interface IRecipeService
     {
-        Task<bool> SaveProductsAsync(int recipeId, List<RecipeProductDTO> recipeProductDTOs);
+        Task<bool> SaveProducts(int recipeId, List<RecipeProductDTO> recipeProductDTOs);
+        Task<RecipeDTO> DeleteRecipe(int recipeId);
     }
 }

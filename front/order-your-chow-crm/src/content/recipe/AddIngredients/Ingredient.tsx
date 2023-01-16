@@ -4,7 +4,7 @@ import { FC, ChangeEvent, Key } from 'react';
 import { Product } from 'src/models/product';
 import { ProductStatus } from 'src/models/product_status';
 import { ProductMeasure } from 'src/models/product_measure';
-import { RecipeProduct } from 'src/models/recipe_product';
+import { RecipeProduct } from 'src/models/recipe/recipe_product';
 
 interface IngredientCardProps {
   index: Key;

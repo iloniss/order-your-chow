@@ -63,7 +63,7 @@ namespace OrderYourChow.CRM.Controllers
         [HttpPost("{recipeId}/products")]
         public async Task<ActionResult<bool>> SaveProducts(int recipeId, [FromBody] RecipeProductListDTO recipeProductListDTO)
         {
-            var insertResult = await _recipeService.SaveProductsAsync(recipeId, recipeProductListDTO.RecipeProductList);
+            var insertResult = await _recipeService.SaveProducts(recipeId, recipeProductListDTO.RecipeProductList);
             if (!insertResult)
                 return NotFound();
 
@@ -100,6 +100,18 @@ namespace OrderYourChow.CRM.Controllers
             if (!insertResult)
                 return NotFound();
 
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpDelete("{recipeId}")]
+        public async Task<IActionResult> DeleteRecipe(int recipeId)
+        {
+            var result = await _recipeService.DeleteRecipe(recipeId);
+
+            if (result is ErrorRecipeDTO)
+                return BadRequest(new { (result as ErrorRecipeDTO).Message });
+            else if(result is EmptyRecipeDTO)
+                return NotFound(new { (result as EmptyRecipeDTO).Message });
             return StatusCode(StatusCodes.Status204NoContent);
         }
     }

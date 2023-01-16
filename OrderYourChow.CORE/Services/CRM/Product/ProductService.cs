@@ -48,6 +48,7 @@ namespace OrderYourChow.CORE.Services.CRM.Product
 
             var result = await _productRepository.DeleteProductAsync(productId);
 
+            if(result is not EmptyProductDTO)
             _fileProcessor.DeleteFile(result.Image, Const.Shared.Global.ProductImagesPath);
 
             return result;

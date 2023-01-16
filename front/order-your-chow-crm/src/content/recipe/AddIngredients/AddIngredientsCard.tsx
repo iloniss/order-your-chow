@@ -10,18 +10,18 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { FC, useState, ChangeEvent } from 'react';
-import { Recipe } from 'src/models/recipe';
 import { Product } from 'src/models/product';
 import { ProductMeasure } from 'src/models/product_measure';
 import Ingredient from './Ingredient';
 import recipeService from 'src/services/recipeService';
 import 'src/styles.css';
-import { RecipeProductArray } from 'src/models/recipe_product_array';
-import { RecipeProduct } from 'src/models/recipe_product';
+import { RecipeProductArray } from 'src/models/recipe/recipe_product_array';
+import { RecipeProduct } from 'src/models/recipe/recipe_product';
 import { ProductStatus } from 'src/models/product_status';
+import { RecipesList } from 'src/models/recipe/recipes_list';
 
 interface AddIngredientsCardProps {
-  recipes: Recipe[];
+  recipes: RecipesList[];
   products: Product[];
   productMeasures: ProductMeasure[];
   selectedRecipe: String;

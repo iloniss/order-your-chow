@@ -17,7 +17,7 @@ namespace OrderYourChow.DAL.CORE
 
             var dbContextBuilder = new DbContextOptionsBuilder<OrderYourChowContext>();
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("OrderYourChow");
 
             dbContextBuilder.UseSqlServer(connectionString);
 
