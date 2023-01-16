@@ -20,64 +20,11 @@ import {
   DialogActions,
   DialogTitle
 } from '@mui/material';
-
 import { ProductCategory } from 'src/models/product_category';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import categoryService from 'src/services/categoryService';
-
-function DeleteDialog(props) {
-  const {
-    productCategoryId,
-    open,
-    setOpen,
-    setProductCategories,
-    productCategories
-  } = props;
-
-  const deleteCategory = async (productCategoryId: number) => {
-    var result = await categoryService.deleteCategory(productCategoryId);
-    if (result == null) {
-      setProductCategories(
-        productCategories.filter(
-          (productCategories) =>
-            productCategoryId !== productCategories.productCategoryId
-        )
-      );
-    } else {
-      alert(result);
-    }
-    setOpen(false);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        {'Czy na pewno chcesz usunąć kategorię?'}
-      </DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Nie</Button>
-        <Button
-          onClick={async () => {
-            await deleteCategory(productCategoryId);
-          }}
-          autoFocus
-        >
-          Tak
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+import DeleteDialog from 'src/components/DeleteDialog/DeleteDialog';
 
 interface CategoriesTableProps {
   className?: string;
@@ -117,6 +64,21 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
 
   var paginatedProducts = applyPagination(productCategories, page, limit);
   const theme = useTheme();
+
+  const deleteCategory = async (productCategoryId: number) => {
+    var result = await categoryService.deleteCategory(productCategoryId);
+    if (result == null) {
+      setProductCategories(
+        productCategories.filter(
+          (productCategories) =>
+            productCategoryId !== productCategories.productCategoryId
+        )
+      );
+    } else {
+      alert(result);
+    }
+    setOpen(false);
+  };
 
   return (
     <Card>
@@ -200,11 +162,11 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
         </Table>
       </TableContainer>
       <DeleteDialog
-        productCategoryId={productCategoryId}
+        itemId={productCategoryId}
         open={open}
         setOpen={setOpen}
-        setProductCategories={setProductCategories}
-        productCategories={productCategories}
+        deleteItem={deleteCategory}
+        itemName={'kategorię'}
       />
       <Box p={2}>
         <TablePagination

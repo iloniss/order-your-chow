@@ -19,11 +19,7 @@ import {
   MenuItem,
   Typography,
   useTheme,
-  CardHeader,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle
+  CardHeader
 } from '@mui/material';
 
 import { Product } from 'src/models/product';
@@ -31,50 +27,7 @@ import { ProductCategory } from 'src/models/product_category';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import ProductService from './../../../services/productService';
-
-function DeleteDialog(props) {
-  const { productId, open, setOpen, setProducts, products } = props;
-
-  const deleteProduct = async (productId: number) => {
-    var result = await ProductService.deleteProduct(productId);
-    if (result == null) {
-      setProducts(
-        products.filter((product) => productId !== product.productId)
-      );
-    } else {
-      alert(result);
-    }
-    setOpen(false);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        {'Czy na pewno chcesz usunąć produkt?'}
-      </DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Nie</Button>
-        <Button
-          onClick={async () => {
-            await deleteProduct(productId);
-          }}
-          autoFocus
-        >
-          Tak
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+import DeleteDialog from 'src/components/DeleteDialog/DeleteDialog';
 
 interface ProductsTableProps {
   className?: string;
@@ -160,6 +113,18 @@ const ProductsTable: FC<ProductsTableProps> = ({
   const handleClickOpen = async (id: number) => {
     setProductId(id);
     setOpen(true);
+  };
+
+  const deleteProduct = async (productId: number) => {
+    var result = await ProductService.deleteProduct(productId);
+    if (result == null) {
+      setProducts(
+        products.filter((product) => productId !== product.productId)
+      );
+    } else {
+      alert(result);
+    }
+    setOpen(false);
   };
 
   const filteredProducts = applyFilters(products, filters);
@@ -279,11 +244,11 @@ const ProductsTable: FC<ProductsTableProps> = ({
         </Table>
       </TableContainer>
       <DeleteDialog
-        productId={productId}
+        itemId={productId}
         open={open}
         setOpen={setOpen}
-        setProducts={setProducts}
-        products={products}
+        deleteItem={deleteProduct}
+        itemName={'produkt'}
       />
       <Box p={2}>
         <TablePagination
