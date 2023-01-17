@@ -39,6 +39,12 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
   setRecipeProducts
 }) => {
   const [formErrorRecipe, setFormErrorRecipe] = useState<boolean>(true);
+  const [ingredientError, setIngredientError] = useState<boolean>(false);
+
+  const isError = (error: boolean) => {
+    setIngredientError(error);
+    return ingredientError;
+  };
 
   const handleChangeRecipe = (event: ChangeEvent<HTMLInputElement>): void => {
     setSelectedRecipe(event.target.value);
@@ -59,7 +65,7 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
 
   const onDeleteIngredient = (key: number): void => {
     const updatedIngredient = recipeProducts.filter(
-      (ingredient) => ingredient.recipeProductId !== key
+      (ingredient) => ingredient.productId !== key
     );
     setRecipeProducts(updatedIngredient);
   };
@@ -132,6 +138,7 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
                 recipeProducts={recipeProducts}
                 setRecipeProducts={setRecipeProducts}
                 onDeleteIngredient={onDeleteIngredient}
+                isError={isError}
               />
             ))}
           </ul>
@@ -143,7 +150,12 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
             Dodaj następny produkt
           </Button>
           <div style={{ margin: 20, marginLeft: 350 }}>
-            <Button onClick={handleSubmit} variant="contained" size="large">
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              size="large"
+              disabled={ingredientError}
+            >
               Dodaj składniki
             </Button>
           </div>
