@@ -9,6 +9,7 @@ using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Contracts.Services;
 using OrderYourChow.CORE.Services;
 using OrderYourChow.CORE.Services.CRM.Product;
+using OrderYourChow.CORE.Services.CRM.Recipe;
 using OrderYourChow.CORE.Validators.CRM.Base;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
 using OrderYourChow.Repositories.Repositories.CRM.Recipe;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRecipeProductMeasureService, RecipeProductMeasureService>();
 var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
 
 builder.Services.AddSingleton(s => config.CreateMapper());

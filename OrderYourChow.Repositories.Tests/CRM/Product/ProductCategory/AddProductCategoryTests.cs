@@ -5,7 +5,7 @@ using OrderYourChow.Repositories.Repositories.CRM.Product;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductRepository")]
+    [Collection("Repository")]
     public class AddProductCategoryTests : ProductCategoryBase
     {
         [Fact]

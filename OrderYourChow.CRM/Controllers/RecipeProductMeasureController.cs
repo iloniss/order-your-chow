@@ -24,8 +24,8 @@ namespace OrderYourChow.CRM.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<RecipeProductMeasureDTO>>> GetRecipeProductMeasure() => 
-            Ok(await _productMeasureService.GetRecipeProductMeasure());
+        public async Task<ActionResult<List<RecipeProductMeasureDTO>>> GetRecipeProductMeasures() => 
+            Ok(await _productMeasureService.GetRecipeProductMeasures());
 
         [HttpGet("{recipeProductMeasureId}")]
         public async Task<ActionResult<RecipeProductMeasureDTO>> GetRecipeProductMeasureById(int recipeProductMeasureId) => 

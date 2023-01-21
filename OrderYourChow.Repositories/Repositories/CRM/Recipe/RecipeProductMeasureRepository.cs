@@ -36,7 +36,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             }
         }
 
-        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasureAsync() => 
+        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasuresAsync() => 
             _mapper.Map<List<RecipeProductMeasureDTO>>(await _orderYourChowContext.SProductMeasures.OrderBy(x => x.Name).ToListAsync());
 
         public async Task<RecipeProductMeasureDTO> GetRecipeProductMeasureAsync(GetRecipeProductMeasureQuery getRecipeProductMeasureQuery) => 

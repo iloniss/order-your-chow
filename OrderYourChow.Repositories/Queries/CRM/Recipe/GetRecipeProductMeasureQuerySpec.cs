@@ -11,7 +11,7 @@ namespace OrderYourChow.Repositories.Queries.CRM.Recipe
         {
             var predicate = PredicateBuilder.New<SProductMeasure>();
 
-            if (string.IsNullOrEmpty(getRecipeProductMeasureQuery.Name))
+            if (!string.IsNullOrEmpty(getRecipeProductMeasureQuery.Name))
                 predicate = predicate.And(recipreProductMeasure => recipreProductMeasure.Name == getRecipeProductMeasureQuery.Name);
 
             if (getRecipeProductMeasureQuery.RecipeProductMeasureId != null)

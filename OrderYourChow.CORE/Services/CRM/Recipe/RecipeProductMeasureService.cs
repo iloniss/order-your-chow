@@ -30,8 +30,8 @@ namespace OrderYourChow.CORE.Services.CRM.Recipe
             return await _recipeProductMeasureRepository.DeleteRecipeProductMeasureAsync(recipeProductMeasureId);
         }
 
-        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasure() =>
-            await _recipeProductMeasureRepository.GetRecipeProductMeasureAsync();
+        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasures() =>
+            await _recipeProductMeasureRepository.GetRecipeProductMeasuresAsync();
 
         public async Task<RecipeProductMeasureDTO> GetRecipeProductMeasureById(int recipeProductMeasureId) =>
             await _recipeProductMeasureRepository.GetRecipeProductMeasureAsync(new GetRecipeProductMeasureQuery(recipeProductMeasureId: recipeProductMeasureId));
@@ -41,7 +41,7 @@ namespace OrderYourChow.CORE.Services.CRM.Recipe
             var existrecipeProductMeasure = await _recipeProductMeasureRepository.GetRecipeProductMeasureAsync(new GetRecipeProductMeasureQuery(name: recipeProductMeasureDTO.Name));
 
             if (existrecipeProductMeasure != null && existrecipeProductMeasure.ProductMeasureId != recipeProductMeasureDTO.ProductMeasureId)
-                return new ErrorRecipeProductMeasureDTO(Const.CRM.Product.ExistedProductCategory);
+                return new ErrorRecipeProductMeasureDTO(Const.CRM.Recipe.ExistedRecipeProductMeasure);
 
             return await _recipeProductMeasureRepository.UpdateRecipeProductMeasureAsync(recipeProductMeasureDTO);
         }

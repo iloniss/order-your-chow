@@ -64,15 +64,18 @@ namespace OrderYourChow.CORE.Services.CRM.Product
 
             if(existedProduct == null || existedProduct.ProductId == productDTO.ProductId)
             {
+
                 if (imageFile != null)
                 {
-                    _fileProcessor.DeleteFile(productDTO.Image, Const.Shared.Global.ProductImagesPath);
                     productDTO.Image = await _fileProcessor.SaveFileFromWebsite(imageFile, Const.Shared.Global.ProductImagesPath);
+                    var result = await _productRepository.UpdateProductAsync(productDTO);
+                    _fileProcessor.DeleteFile(result.Image, Const.Shared.Global.ProductImagesPath);
+                    return result;
                 }
-
-                var result = await _productRepository.UpdateProductAsync(productDTO);
-
-                return result;
+                else
+                {
+                    return await _productRepository.UpdateProductAsync(productDTO);
+                }
             }
             return new ErrorProductDTO(Const.CRM.Product.ExistedProduct);
         }
