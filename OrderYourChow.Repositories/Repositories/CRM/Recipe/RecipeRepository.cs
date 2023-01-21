@@ -4,6 +4,9 @@ using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
+using OrderYourChow.CORE.Queries.CRM.Recipe;
+using OrderYourChow.Repositories.Queries.CRM.Recipe;
+using LinqKit;
 
 namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
 {
@@ -28,10 +31,10 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 .ToListAsync());
         }
 
-        public async Task<RecipeDTO> GetRecipeAsync(int recipeId)
+        public async Task<RecipeDTO> GetRecipeAsync(GetRecipeQuery getRecipeQuery)
         {
             return _mapper.Map<RecipeDTO>(await _orderYourChowContext.DRecipes
-                .Where(x => x.RecipeId == recipeId).SingleOrDefaultAsync());
+                .Where(GetRecipeQuerySpec.Filter(getRecipeQuery).Expand()).SingleOrDefaultAsync());
         }
 
         public async Task<RecipeProductListDTO> GetRecipeProductsAsync(int recipeId)
@@ -143,7 +146,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 _orderYourChowContext.DRecipeProducts.Remove(productsToDelete);
             }
         }
-        public async Task<bool> AddDescriptionAsync(RecipeDescriptionDTO recipeDescriptionDTO)
+        public async Task<bool> UpdateDescriptionAsync(RecipeDescriptionDTO recipeDescriptionDTO)
         {
             var recipe = await _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeDescriptionDTO.RecipeId).SingleOrDefaultAsync();
             if (recipe == null)
@@ -187,6 +190,29 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
                 return true;
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<RecipeDTO> UpdateRecipeAsync(RecipeDTO recipeDTO)
+        {
+            var recipe = _orderYourChowContext.DRecipes.Where(x => x.RecipeId == recipeDTO.RecipeId).SingleOrDefault();
+            if (recipe == null)
+                return new EmptyRecipeDTO(CORE.Const.CRM.Recipe.NotFoundRecipe);
+            using var tran = _orderYourChowContext.Database.BeginTransaction();
+            try
+            {
+                recipe.Duration = recipeDTO.Duration;
+                recipe.Name = recipeDTO.Name;
+                recipe.CategoryId = recipeDTO.RecipeCategoryId;
+                recipe.Meat = recipeDTO.Meat;
+                recipe.MainImage = string.IsNullOrEmpty(recipeDTO.MainImage) ? recipe.MainImage : recipeDTO.MainImage;
+                await _orderYourChowContext.SaveChangesAsync();
+                await tran.CommitAsync();
+                return new UpdatedRecipeDTO();
+            }
+            catch(Exception)
             {
                 throw;
             }

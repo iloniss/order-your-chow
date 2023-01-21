@@ -1,4 +1,4 @@
-import { Suspense, lazy, Children } from 'react';
+import { Suspense, lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import { PartialRouteObject } from 'react-router';
 
@@ -33,6 +33,7 @@ const AddRecipeDescription = Loader(
   lazy(() => import('src/content/recipe/AddDescription'))
 );
 const Recipes = Loader(lazy(() => import('src/content/recipe/Actions')));
+const EditRecipe = Loader(lazy(() => import('src/content/recipe/Edit')));
 // Components
 
 // Status
@@ -169,12 +170,24 @@ const routes: PartialRouteObject[] = [
         element: <Navigate to="/recipe/actions" replace />
       },
       {
+        path: 'add/ingredients',
+        element: <AddIngredients />
+      },
+      {
+        path: 'add/description',
+        element: <AddRecipeDescription />
+      },
+      {
         path: 'add/info',
         element: <AddRecipe />
       },
       {
         path: 'list',
         element: <Recipes />
+      },
+      {
+        path: 'edit',
+        element: <EditRecipe />
       }
     ]
   },
@@ -193,95 +206,6 @@ const routes: PartialRouteObject[] = [
       {
         path: 'edit',
         element: <EditCategory />
-      }
-      //       {
-      //         path: 'profile',
-      //         children: [
-      //           {
-      //             path: '/',
-      //             element: (
-      //               <Navigate
-      //                 to="details"
-      //                 replace
-      //               />
-      //             )
-      //           },
-      //           {
-      //             path: 'details',
-      //             element: <UserProfile />
-      //           },
-      //           {
-      //             path: 'settings',
-      //             element: <UserSettings />
-      //           },
-      //         ]
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     path: 'components',
-      //     element: (
-      //       <SidebarLayout />
-      //     ),
-      //     children: [
-      //       {
-      //         path: '/',
-      //         element: (
-      //           <Navigate
-      //             to="/components/buttons"
-      //             replace
-      //           />
-      //         )
-      //       },
-      //       {
-      //         path: 'buttons',
-      //         element: <Buttons />
-      //       },
-      //       {
-      //         path: 'modals',
-      //         element: <Modals />
-      //       },
-      //       {
-      //         path: 'accordions',
-      //         element: <Accordions />
-      //       },
-      //       {
-      //         path: 'tabs',
-      //         element: <Tabs />
-      //       },
-      //       {
-      //         path: 'badges',
-      //         element: <Badges />
-      //       },
-      //       {
-      //         path: 'tooltips',
-      //         element: <Tooltips />
-      //       },
-      //       {
-      //         path: 'avatars',
-      //         element: <Avatars />
-      //       },
-      //       {
-      //         path: 'cards',
-      //         element: <Cards />
-      //       },
-      //       {
-      //         path: 'forms',
-      //         element: <Forms />
-      //       },
-    ]
-  },
-  {
-    path: 'recipe/add',
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: 'ingredients',
-        element: <AddIngredients />
-      },
-      {
-        path: 'description',
-        element: <AddRecipeDescription />
       }
     ]
   }

@@ -14,6 +14,12 @@ class RecipeService {
     });
   }
 
+  async getRecipe(reciepId: number) {
+    return await http.get<Recipe>('/recipe/' + reciepId.toString(), {
+      params: { reciepId: reciepId }
+    });
+  }
+
   async getAllRecipeCategories() {
     return await http.get<Array<RecipeCategory>>('/recipe/category');
   }
@@ -88,6 +94,21 @@ class RecipeService {
   async deleteRecipe(recipeId: number) {
     return await http
       .delete('/recipe/' + recipeId.toString())
+      .then((response: AxiosResponse) => {
+        return null;
+      })
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
+      });
+  }
+
+  async updateRecipe(data: FormData) {
+    return await http
+      .put('/recipe/', data, {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        }
+      })
       .then((response: AxiosResponse) => {
         return null;
       })

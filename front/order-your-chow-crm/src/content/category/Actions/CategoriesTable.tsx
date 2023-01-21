@@ -14,11 +14,7 @@ import {
   TableRow,
   TableContainer,
   Typography,
-  useTheme,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle
+  useTheme
 } from '@mui/material';
 import { ProductCategory } from 'src/models/product_category';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';

@@ -9,7 +9,7 @@
         #endregion
 
         #region
-        public const string ExistedProduct = "Podany prodkut już istnieje.";
+        public const string ExistedProduct = "Podany produkt już istnieje.";
         public const string UsedProduct = "Produkt, który próbujesz usunąć jest już używany w przepisie.";
         public const string NotFoundProduct = "Produkt nie istnieje.";
         #endregion

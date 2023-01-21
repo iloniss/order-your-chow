@@ -4,7 +4,10 @@ import { FC, ChangeEvent, Key, useState } from 'react';
 import { Product } from 'src/models/product';
 import { ProductStatus } from 'src/models/product_status';
 import { ProductMeasure } from 'src/models/product_measure';
-import { RecipeProduct } from 'src/models/recipe/recipe_product';
+import {
+  RecipeProduct,
+  RecipeProductAdditional
+} from 'src/models/recipe/recipe_product';
 import 'src/styles.css';
 
 interface IngredientCardProps {
@@ -12,10 +15,10 @@ interface IngredientCardProps {
   products: Product[];
   productMeasures: ProductMeasure[];
   onDeleteIngredient: (id: Key) => void;
-  valueIngredient: RecipeProduct;
+  valueIngredient: RecipeProductAdditional;
   recipeProducts: RecipeProduct[];
   setRecipeProducts: React.Dispatch<React.SetStateAction<RecipeProduct[]>>;
-  isError: (error: boolean) => void;
+  setIngredientError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Ingredient: FC<IngredientCardProps> = ({
@@ -26,21 +29,11 @@ const Ingredient: FC<IngredientCardProps> = ({
   valueIngredient,
   recipeProducts,
   setRecipeProducts,
-  isError
+  setIngredientError
 }) => {
-  const optionsMeasure: { id: number; label: string }[] = productMeasures.map(
-    (option) => ({
-      id: option.productMeasureId,
-      label: option.name
-    })
-  );
+  const optionsMeasure = productMeasures.map((measure) => measure.name);
 
-  const optionsProduct: { id: number; label: string }[] = products.map(
-    (option) => ({
-      id: option.productId,
-      label: option.name
-    })
-  );
+  const optionsProduct = products.map((product) => product.name);
 
   const [productError, setProductError] = useState<boolean>(false);
 
@@ -57,23 +50,32 @@ const Ingredient: FC<IngredientCardProps> = ({
 
   const handleChangeProduct = (event, value, index): void => {
     let data = [...recipeProducts];
-    let obj = data.find((item) => item.productId === value.id);
-    if (!obj) {
-      data[index]['productId'] = value.id;
+    console.log(value);
+    let obj = data.find(
+      (item) =>
+        item.productId === products.find((x) => x.name === value)?.productId
+    );
+    if (obj !== null) {
+      data[index]['productId'] = products.find(
+        (x) => x.name === value
+      )?.productId;
       setProductError(false);
-      isError(false);
+      setIngredientError(false);
     } else {
       setProductError(true);
-      isError(true);
+      setIngredientError(true);
     }
     if (data[index]['recipeProductId'] !== 0)
       data[index]['status'] = ProductStatus.Updated;
     setRecipeProducts(data);
+    console.log(valueIngredient.nameMeasure.name);
   };
 
   const handleChangeMeasure = (event, value, index): void => {
     let data = [...recipeProducts];
-    data[index]['productMeasureId'] = value.id;
+    data[index]['productMeasureId'] = productMeasures.find(
+      (x) => x.name === value
+    )?.productMeasureId;
     if (data[index]['recipeProductId'] !== 0)
       data[index]['status'] = ProductStatus.Updated;
     setRecipeProducts(data);
@@ -92,47 +94,27 @@ const Ingredient: FC<IngredientCardProps> = ({
         <Autocomplete
           disableClearable
           options={optionsProduct}
+          value={valueIngredient.nameProduct?.name ?? ''}
           onChange={(event, value) => handleChangeProduct(event, value, index)}
           renderInput={(params) => (
             <TextField {...params} label="Produkty" name="productId" />
           )}
-          value={
-            valueIngredient.productId !== 0
-              ? {
-                  id: valueIngredient.productId,
-                  label: optionsProduct?.find(
-                    (product) => product.id === valueIngredient.productId
-                  ).label
-                }
-              : { id: '', label: '' }
-          }
         />
         <Autocomplete
-          disableClearable
           options={optionsMeasure}
+          value={valueIngredient.nameMeasure?.name ?? ''}
+          disableClearable
           onChange={(event, value) => handleChangeMeasure(event, value, index)}
           renderInput={(params) => (
             <TextField label="Miara" {...params} name="productMeasureId" />
           )}
-          value={
-            valueIngredient.productMeasureId !== 0
-              ? {
-                  id: valueIngredient.productMeasureId,
-                  label: optionsMeasure?.find(
-                    (measure) => measure.id === valueIngredient.productMeasureId
-                  ).label
-                }
-              : { id: '', label: '' }
-          }
         />
-        <div>
-          <TextField
-            name="count"
-            label={'Ilość'}
-            onChange={(event) => handleChangeCount(event, index)}
-            value={valueIngredient.count === 0 ? '' : valueIngredient.count}
-          />
-        </div>
+        <TextField
+          name="count"
+          label={'Ilość'}
+          onChange={(event) => handleChangeCount(event, index)}
+          value={valueIngredient.count === 0 ? '' : valueIngredient.count}
+        />
         <Button onClick={deleteIngredient}>
           <DeleteForeverIcon fontSize="large" />
         </Button>
