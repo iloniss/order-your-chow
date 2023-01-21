@@ -14,6 +14,7 @@
     <Content Include="TestImages\69c42771-522b-4c33-b550-99685ec8b898.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -35,6 +36,27 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileProcessor\FileProcessor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\69c42771-522b-4c33-b550-99685ec8b898.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestImages\d8155945-45c8-49da-90e6-e5604bf85e3f.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

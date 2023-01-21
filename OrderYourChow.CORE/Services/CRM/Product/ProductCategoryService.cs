@@ -1,8 +1,6 @@
 ﻿using OrderYourChow.CORE.Contracts.CRM.Product;
 using OrderYourChow.CORE.Models.CRM.Product;
 using OrderYourChow.CORE.Queries.CRM.Product;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CORE.Services.CRM.Product
 {

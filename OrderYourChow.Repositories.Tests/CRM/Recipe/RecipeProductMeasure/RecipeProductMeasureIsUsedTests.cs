@@ -1,16 +1,18 @@
 ﻿using FluentAssertions;
 using OrderYourChow.DAL.CORE.Models;
-using OrderYourChow.Repositories.Repositories.CRM.Product;
+using OrderYourChow.Repositories.Repositories.CRM.Recipe;
 
-namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
+namespace OrderYourChow.Repositories.Tests.CRM.Recipe.RecipeProductMeasure
 {
     [Collection("Repository")]
-    public class ProductIsUsedTests : ProductBase
+    public class RecipeProductMeasureIsUsedTests : RecipeProductMeasureBase
     {
         [Fact]
-        public async Task ProductIsUsedAsync_ShouldReturnTrue_WhenGivenProductUsedInRecipe()
+        public async Task RecipeProductMeasureIsUsedAsync_ShouldReturnTrue_WhenGivenRecipeProductMeasureIdUsedInProduct()
         {
             // Arrange
+            SProductMeasure productMeasure = new() { Name = "liter" };
+            OrderYourChowContext.SProductMeasures.Add(productMeasure);
             SProductCategory productCategory = new() { Name = "Beverages" };
             OrderYourChowContext.SProductCategories.Add(productCategory);
             SProduct product = new() { Category = productCategory, Name = "Whisky" };
@@ -19,14 +21,13 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
             OrderYourChowContext.SRecipeCategories.Add(recipeCategory);
             DRecipe recipe = new() { Name = "Whiskey sour", Category = recipeCategory };
             OrderYourChowContext.DRecipes.Add(recipe);
-            SProductMeasure productMeasure = new() { Name = "Glass" };
             DRecipeProduct recipeProduct = new() { Recipe = recipe, Product = product, Count = 1, ProductMeasure = productMeasure };
             OrderYourChowContext.DRecipeProducts.Add(recipeProduct);
             OrderYourChowContext.SaveChanges();
 
             // Act
-            var repository = new ProductRepository(OrderYourChowContext, Mapper);
-            var result = await repository.ProductIsUsed(product.ProductId);
+            var repository = new RecipeProductMeasureRepository(OrderYourChowContext, Mapper);
+            var result = await repository.RecipeProductMeasureIsUsed(productMeasure.ProductMeasureId);
 
             // Assert
             result.Should().BeTrue();
@@ -35,22 +36,22 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
             OrderYourChowContext.RemoveRange(OrderYourChowContext.DRecipeProducts);
             OrderYourChowContext.RemoveRange(OrderYourChowContext.DRecipes);
             OrderYourChowContext.RemoveRange(OrderYourChowContext.SRecipeCategories);
+            OrderYourChowContext.RemoveRange(OrderYourChowContext.SProducts);
+            OrderYourChowContext.RemoveRange(OrderYourChowContext.SProductCategories);
             Clear();
         }
 
         [Fact]
-        public async Task ProductIsUsedAsync_ShouldReturnFalse_WhenGivenProductNotUsedInRecipe()
+        public async Task RecipeProductMeasureIsUsedAsync_ShouldReturnFalse_WhenGivenRecipeProductMeasureIdNotUsedInProduct()
         {
             // Arrange
-            SProductCategory productCategory = new() { Name = "Beverages" };
-            OrderYourChowContext.SProductCategories.Add(productCategory);
-            SProduct product = new() { Category = productCategory, Name = "Whisky" };
-            OrderYourChowContext.SProducts.Add(new SProduct() { Category = productCategory, Name = "Whisky" });
+            SProductMeasure productMeasure = new() { Name = "liter" };
+            OrderYourChowContext.SProductMeasures.Add(productMeasure);
             OrderYourChowContext.SaveChanges();
 
             // Act
-            var repository = new ProductRepository(OrderYourChowContext, Mapper);
-            var result = await repository.ProductIsUsed(product.ProductId);
+            var repository = new RecipeProductMeasureRepository(OrderYourChowContext, Mapper);
+            var result = await repository.RecipeProductMeasureIsUsed(productMeasure.ProductMeasureId);
 
             // Assert
             result.Should().BeFalse();
