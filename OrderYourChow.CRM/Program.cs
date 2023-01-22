@@ -1,18 +1,9 @@
-using AutoMapper;
-using FileProcessor.CORE.Services;
-using FileProcessor.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using OrderYourChow.CORE.Contracts.CRM.Product;
-using OrderYourChow.CORE.Contracts.CRM.Recipe;
-using OrderYourChow.CORE.Contracts.Services;
-using OrderYourChow.CORE.Services;
-using OrderYourChow.CORE.Services.CRM.Product;
-using OrderYourChow.CORE.Services.CRM.Recipe;
 using OrderYourChow.CORE.Validators.CRM.Base;
-using OrderYourChow.Repositories.Repositories.CRM.Product;
-using OrderYourChow.Repositories.Repositories.CRM.Recipe;
+using OrderYourChow.CRM.Extensions;
+using OrderYourChow.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -29,22 +20,18 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
-//Services
-builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
-builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
-builder.Services.AddScoped<IRecipeService, RecipeService>();
-builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IRecipeProductMeasureService, RecipeProductMeasureService>();
-var config = new MapperConfiguration(cfg => cfg.AddMaps("OrderYourChow.Repositories"));
+builder.Services.Scan(
+    x =>
+    {
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("FileProcessor") || x.FullName.Contains("OrderYourChow")).ToList();
+        x.FromAssemblies(assemblies)
+            .AddClasses(classes => classes.AssignableTo<IScoped>())
+                .AsImplementedInterfaces()
+                .WithScopedLifetime();
+    });
 
-builder.Services.AddSingleton(s => config.CreateMapper());
+builder.Services.AddAppAutoMapper();
 
-//Repository
-builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-builder.Services.AddScoped<IRecipeProductMeasureRepository, RecipeProductMeasureRepository>();
 
 builder.Services.AddCors(options =>
 {
@@ -77,7 +64,7 @@ if (app.Environment.IsDevelopment())
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-ForwardedHeaders.XForwardedProto
+    ForwardedHeaders.XForwardedProto
 });
 
 app.UseCors(MyAllowSpecificOrigins);

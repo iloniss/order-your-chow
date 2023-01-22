@@ -1,8 +1,9 @@
 ﻿using OrderYourChow.CORE.Models.CRM.Recipe;
+using OrderYourChow.Infrastructure.Services;
 
 namespace OrderYourChow.CORE.Contracts.CRM.Recipe
 {
-    public interface IRecipeProductMeasureService
+    public interface IRecipeProductMeasureService : IScopedService
     {
         Task<RecipeProductMeasureDTO> GetRecipeProductMeasureById(int recipeProductMeasureId);
         Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasures();
