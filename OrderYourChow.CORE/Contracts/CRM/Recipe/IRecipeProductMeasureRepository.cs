@@ -1,9 +1,10 @@
 ﻿using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Queries.CRM.Recipe;
+using OrderYourChow.Infrastructure.Services;
 
 namespace OrderYourChow.CORE.Contracts.CRM.Recipe
 {
-    public interface IRecipeProductMeasureRepository
+    public interface IRecipeProductMeasureRepository : IScopedRepository
     {
         Task<RecipeProductMeasureDTO> AddRecipeProductMeasureAsync(RecipeProductMeasureDTO recipeProductMeasureDTO);
         Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasuresAsync();

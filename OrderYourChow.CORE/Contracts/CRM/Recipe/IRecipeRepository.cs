@@ -1,12 +1,10 @@
-﻿using OrderYourChow.CORE.Models.API.Recipe;
-using OrderYourChow.CORE.Models.CRM.Recipe;
+﻿using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using OrderYourChow.Infrastructure.Services;
 
 namespace OrderYourChow.CORE.Contracts.CRM.Recipe
 {
-    public interface IRecipeRepository
+    public interface IRecipeRepository : IScopedRepository
     {
         Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive);
         Task<Models.CRM.Recipe.RecipeDTO> GetRecipeAsync(int recipeId);
