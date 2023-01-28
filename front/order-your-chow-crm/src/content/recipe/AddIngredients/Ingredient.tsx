@@ -111,6 +111,7 @@ const Ingredient: FC<IngredientCardProps> = ({
         />
         <TextField
           name="count"
+          type="number"
           label={'Ilość'}
           onChange={(event) => handleChangeCount(event, index)}
           value={valueIngredient.count === 0 ? '' : valueIngredient.count}

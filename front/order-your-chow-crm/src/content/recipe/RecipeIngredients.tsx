@@ -3,10 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { FC, Fragment } from 'react';
 import Ingredient from './AddIngredients/Ingredient';
 import { ProductStatus } from 'src/models/product_status';
-import {
-  RecipeProduct,
-  RecipeProductAdditional
-} from 'src/models/recipe/recipe_product';
+import { RecipeProduct } from 'src/models/recipe/recipe_product';
 import { ProductMeasure } from 'src/models/product_measure';
 import { Product } from 'src/models/product';
 
