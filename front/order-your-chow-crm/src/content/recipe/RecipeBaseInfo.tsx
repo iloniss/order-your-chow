@@ -3,11 +3,13 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
-  MenuItem
+  MenuItem,
+  Box
 } from '@mui/material';
-import { ChangeEvent, FC, Fragment } from 'react';
+import { ChangeEvent, FC, Fragment, useState } from 'react';
 import { Recipe } from 'src/models/recipe/recipe';
 import { RecipeCategory } from 'src/models/recipe/recipe_category';
+import { recipesPath } from '../../http-common';
 
 interface RecipeBaseInfoProps {
   formValue: Recipe;
@@ -30,6 +32,11 @@ const RecipeBaseInfo: FC<RecipeBaseInfoProps> = ({
   recipeCategories,
   formErrorCategory
 }) => {
+  const [file, setFile] = useState(undefined);
+  const handleChangeFile = (event) => {
+    setFile(URL.createObjectURL(event.target.files[0]));
+  };
+
   const handleChangeSwitch = () => {
     setFormValue({
       ...formValue,
@@ -108,7 +115,35 @@ const RecipeBaseInfo: FC<RecipeBaseInfoProps> = ({
           />
         </FormGroup>
       </div>
-      <span className="textForm">Dodaj zdjęcie przepisu</span>
+      {formValue.mainImage || file ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          style={{ maxWidth: '50vh' }}
+        >
+          {file ? (
+            <img
+              style={{ marginLeft: 200, marginBottom: 10 }}
+              src={file}
+              width="100%"
+              height="100%"
+              alt="zdjęcie"
+            />
+          ) : (
+            <img
+              style={{ marginLeft: 200, marginBottom: 10 }}
+              src={recipesPath + formValue.mainImage}
+              width="100%"
+              height="100%"
+              alt="zdjęcie"
+            />
+          )}
+        </Box>
+      ) : null}
+      <span className="textForm">
+        {formValue.mainImage || file ? 'Edytuj' : 'Dodaj'} zdjęcie przepisu
+      </span>
       <div>
         <TextField
           required
@@ -116,6 +151,7 @@ const RecipeBaseInfo: FC<RecipeBaseInfoProps> = ({
           name="image"
           id="outlined-required"
           type="file"
+          onChange={handleChangeFile}
         />
         {!formErrorImage && (
           <div className="errorsForm">Należy dodać zdjęcie przepisu.</div>

@@ -5,7 +5,8 @@ import {
   Divider,
   CardContent,
   Box,
-  Button
+  Button,
+  Grid
 } from '@mui/material';
 import 'src/styles.css';
 import MenuItem from '@mui/material/MenuItem';
@@ -36,8 +37,12 @@ const EditProductCard: FC<EditProductCardProps> = ({
   });
 
   const [formErrorName, setFormErrorName] = useState(true);
-
+  const [file, setFile] = useState(undefined);
   const [formErrorCategory, setFormErrorCategory] = useState(true);
+
+  const handleChangeFile = (event) => {
+    setFile(URL.createObjectURL(event.target.files[0]));
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setproductData({
@@ -109,7 +114,12 @@ const EditProductCard: FC<EditProductCardProps> = ({
               id="outlined-select-currency"
               select
               required
-              style={{ width: 700, margin: 20, marginTop: 5, marginBottom: 10 }}
+              style={{
+                width: 700,
+                margin: 20,
+                marginTop: 5,
+                marginBottom: 10
+              }}
               name="productCategoryId"
               value={productData.productCategoryId}
               onChange={handleChange}
@@ -131,7 +141,12 @@ const EditProductCard: FC<EditProductCardProps> = ({
           <div>
             <TextField
               required
-              style={{ width: 700, margin: 20, marginTop: 5, marginBottom: 10 }}
+              style={{
+                width: 700,
+                margin: 20,
+                marginTop: 5,
+                marginBottom: 10
+              }}
               name="name"
               id="outlined-required"
               value={productData.name}
@@ -141,18 +156,46 @@ const EditProductCard: FC<EditProductCardProps> = ({
               <div className="errorsForm">Należy podać nazwę produktu.</div>
             )}
           </div>
-          {productData.image && (
-            <img src={productsPath + productData.image} alt="zdjęcie" />
-          )}
-
+          {productData.image || file ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ maxWidth: '50vh' }}
+            >
+              {file ? (
+                <img
+                  style={{ marginLeft: 200, marginBottom: 10 }}
+                  src={file}
+                  width="100%"
+                  height="100%"
+                  alt="zdjęcie"
+                />
+              ) : (
+                <img
+                  style={{ marginLeft: 200, marginBottom: 10 }}
+                  src={productsPath + productData.image}
+                  width="100%"
+                  height="100%"
+                  alt="zdjęcie"
+                />
+              )}
+            </Box>
+          ) : null}
           <span className="textForm">Edytuj zdjęcie produktu</span>
           <div>
             <TextField
               required
-              style={{ width: 700, margin: 20, marginTop: 5, marginBottom: 10 }}
+              style={{
+                width: 700,
+                margin: 20,
+                marginTop: 5,
+                marginBottom: 10
+              }}
               name="image"
               id="outlined-required"
               type="file"
+              onChange={handleChangeFile}
             />
           </div>
           <Button

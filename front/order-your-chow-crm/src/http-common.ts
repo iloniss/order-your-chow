@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const baseURL = 'https://localhost:44387/';
 export const productsPath = baseURL + 'images/products/';
+export const recipesPath = baseURL + 'images/recipes/';
 
 export default axios.create({
   baseURL: baseURL + 'api',
