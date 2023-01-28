@@ -13,6 +13,7 @@ import { useState, FC, ChangeEvent } from 'react';
 import { ProductCategory } from 'src/models/product_category';
 import ProductService from 'src/services/productService';
 import { AddProduct } from 'src/models/add_product';
+import { productsPath } from '../../../http-common';
 
 interface EditProductCardProps {
   productData: AddProduct;
@@ -142,6 +143,10 @@ const EditProductCard: FC<EditProductCardProps> = ({
               <div className="errorsForm">Należy podać nazwę produktu.</div>
             )}
           </div>
+          {productData.image && (
+            <img src={productsPath + productData.image} alt="zdjęcie" />
+          )}
+
           <span className="textForm">Edytuj zdjęcie produktu</span>
           <div>
             <TextField

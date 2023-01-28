@@ -1,3 +1,5 @@
+using FileProcessor.CORE.Services;
+using FileProcessor.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,8 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
+builder.Services.AddScoped<IFileProcessor, FileProcessor.Services.FileProcessor>();
+builder.Services.AddScoped<IFileProcessorValidator, FileProcessorValidator>();
 builder.Services.Scan(
     x =>
     {
@@ -66,6 +70,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor |
     ForwardedHeaders.XForwardedProto
 });
+
+app.UseStaticFiles();
 
 app.UseCors(MyAllowSpecificOrigins);
 
