@@ -45,7 +45,11 @@ const AddProductsCard: FC<AddProductsCardProps> = ({ productCategories }) => {
   const [formErrorCategory, setFormErrorCategory] = useState(true);
 
   const [formErrorImage, setFormErrorImage] = useState(true);
+  const [file, setFile] = useState(undefined);
 
+  const handleChangeFile = (event) => {
+    setFile(URL.createObjectURL(event.target.files[0]));
+  };
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setformValue({
       ...formValue,
@@ -153,7 +157,25 @@ const AddProductsCard: FC<AddProductsCardProps> = ({ productCategories }) => {
               <div className="errorsForm">Należy podać nazwę produktu.</div>
             )}
           </div>
-          <span className="textForm">Dodaj zdjęcie produktu</span>
+          {file ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ maxWidth: '50vh' }}
+            >
+              <img
+                style={{ marginLeft: 200, marginBottom: 10 }}
+                src={file}
+                width="100%"
+                height="100%"
+                alt="zdjęcie"
+              />
+            </Box>
+          ) : null}
+          <span className="textForm">
+            {file != null || file ? 'Edytuj' : 'Dodaj'} zdjęcie produktu
+          </span>
           <div>
             <TextField
               required
@@ -161,6 +183,7 @@ const AddProductsCard: FC<AddProductsCardProps> = ({ productCategories }) => {
               name="image"
               id="outlined-required"
               type="file"
+              onChange={handleChangeFile}
             />
             {!formErrorImage && (
               <div className="errorsForm">Należy dodać zdjęcie produktu.</div>

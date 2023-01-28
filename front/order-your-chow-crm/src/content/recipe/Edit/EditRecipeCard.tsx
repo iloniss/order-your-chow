@@ -161,6 +161,7 @@ const EditRecipeCard: FC<EditRecipeProps> = ({
               </Button>
             </div>
           </Paper>
+
           <Paper elevation={2} className="paperOption">
             <Typography variant="h5" className="title">
               Edytuj składniki dodane do przepisu
