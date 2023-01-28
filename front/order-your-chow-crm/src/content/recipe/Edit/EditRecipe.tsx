@@ -64,7 +64,7 @@ const EditRecipe = () => {
       getRecipeCategories();
       setIsLoading(false);
     })();
-  }, [recipeProducts, products, measures, recipeCategories]);
+  }, []);
 
   return (
     <Card>

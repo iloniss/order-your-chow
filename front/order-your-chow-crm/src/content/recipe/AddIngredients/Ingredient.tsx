@@ -68,7 +68,7 @@ const Ingredient: FC<IngredientCardProps> = ({
     if (data[index]['recipeProductId'] !== 0)
       data[index]['status'] = ProductStatus.Updated;
     setRecipeProducts(data);
-    console.log(valueIngredient.nameMeasure.name);
+    console.log(valueIngredient.nameMeasure);
   };
 
   const handleChangeMeasure = (event, value, index): void => {
