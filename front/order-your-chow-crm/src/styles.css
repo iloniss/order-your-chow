@@ -12,6 +12,15 @@
   font-size: 13px;
 }
 
+.title {
+  margin: 10px;
+}
+
+.paperOption {
+  margin: 20px 50px 30px 50px;
+  padding: 20px;
+  align-self: flex-end;
+}
 .textArea {
   width: 700px;
   min-height: 100px;

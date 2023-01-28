@@ -10,7 +10,7 @@ import {
 import 'src/styles.css';
 import { useState, FC, ChangeEvent } from 'react';
 import { ProductCategory } from 'src/models/product_category';
-import CategoryService from 'src/services/categoryService';
+import categoryService from 'src/services/categoryService';
 
 interface EditCategoryCardProps {
   productCategory: ProductCategory;
@@ -49,7 +49,6 @@ const EditCategoryCard: FC<EditCategoryCardProps> = ({
     );
 
     var result = await categoryService.putCategory(loginFromData);
-    console.log(result);
     if (result == null) {
       window.location.href = '/product/category';
     } else {

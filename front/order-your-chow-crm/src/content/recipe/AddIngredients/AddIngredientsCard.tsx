@@ -8,20 +8,18 @@ import {
   TextField,
   Button
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import { FC, useState, ChangeEvent } from 'react';
-import { Recipe } from 'src/models/recipe';
 import { Product } from 'src/models/product';
 import { ProductMeasure } from 'src/models/product_measure';
-import Ingredient from './Ingredient';
 import recipeService from 'src/services/recipeService';
 import 'src/styles.css';
-import { RecipeProductArray } from 'src/models/recipe_product_array';
-import { RecipeProduct } from 'src/models/recipe_product';
-import { ProductStatus } from 'src/models/product_status';
+import { RecipeProductArray } from 'src/models/recipe/recipe_product_array';
+import { RecipeProduct } from 'src/models/recipe/recipe_product';
+import { RecipesList } from 'src/models/recipe/recipes_list';
+import RecipeIngredients from '../RecipeIngredients';
 
 interface AddIngredientsCardProps {
-  recipes: Recipe[];
+  recipes: RecipesList[];
   products: Product[];
   productMeasures: ProductMeasure[];
   selectedRecipe: String;
@@ -39,35 +37,17 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
   setRecipeProducts
 }) => {
   const [formErrorRecipe, setFormErrorRecipe] = useState<boolean>(true);
+  const [ingredientError, setIngredientError] = useState<boolean>(false);
 
   const handleChangeRecipe = (event: ChangeEvent<HTMLInputElement>): void => {
     setSelectedRecipe(event.target.value);
-  };
-
-  const onAddNextIngredient = () => {
-    let newIngredient = {
-      recipeProductId: 0,
-      productId: 0,
-      productMeasureId: 0,
-      count: 0,
-      status: ProductStatus.New
-    };
-    setRecipeProducts((prevState) => {
-      return [...prevState, newIngredient];
-    });
-  };
-
-  const onDeleteIngredient = (key: number): void => {
-    const updatedIngredient = recipeProducts.filter(
-      (ingredient) => ingredient.recipeProductId !== key
-    );
-    setRecipeProducts(updatedIngredient);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedRecipe === '') {
       setFormErrorRecipe(false);
+      return;
     } else {
       setFormErrorRecipe(true);
     }
@@ -117,33 +97,22 @@ const AddIngredientsCard: FC<AddIngredientsCardProps> = ({
             ))}
           </TextField>
           {!formErrorRecipe && (
-            <div className="errorsForm">
-              Należy wybrać przepis, do którego chcesz dodać składniki.
-            </div>
+            <div className="errorsForm">Należy wybrać kategorię.</div>
           )}
-          <ul className="ingredients" style={{ padding: 0 }}>
-            {recipeProducts?.map((ingredient, index) => (
-              <Ingredient
-                key={index}
-                index={index}
-                products={products}
-                productMeasures={productMeasures}
-                valueIngredient={ingredient}
-                recipeProducts={recipeProducts}
-                setRecipeProducts={setRecipeProducts}
-                onDeleteIngredient={onDeleteIngredient}
-              />
-            ))}
-          </ul>
-          <Button
-            onClick={onAddNextIngredient}
-            style={{ marginLeft: 15, marginTop: 10 }}
-          >
-            <AddIcon fontSize="large" />
-            Dodaj następny produkt
-          </Button>
+          <RecipeIngredients
+            recipeProducts={recipeProducts}
+            setRecipeProducts={setRecipeProducts}
+            productMeasures={productMeasures}
+            products={products}
+            setIngredientError={setIngredientError}
+          />
           <div style={{ margin: 20, marginLeft: 350 }}>
-            <Button onClick={handleSubmit} variant="contained" size="large">
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              size="large"
+              disabled={ingredientError}
+            >
               Dodaj składniki
             </Button>
           </div>

@@ -5,6 +5,7 @@ using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Contracts.Services;
 using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
+using OrderYourChow.CORE.Queries.CRM.Recipe;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -36,6 +37,9 @@ namespace OrderYourChow.CRM.Controllers
         {
             return Ok(await _recipeRepository.GetRecipesAsync(isActive));
         }
+        [HttpGet("{recipeId}")]
+        public async Task<ActionResult<RecipeDTO>> GetRecipe(int recipeId) =>
+            Ok(await _recipeRepository.GetRecipeAsync(new GetRecipeQuery { RecipeId = recipeId}));
 
         [HttpGet("{recipeId:int}/recipeProducts")]
         public async Task<ActionResult<RecipeProductListDTO>> GetRecipeProducts([FromRoute] int recipeId)
@@ -63,7 +67,7 @@ namespace OrderYourChow.CRM.Controllers
         [HttpPost("{recipeId}/products")]
         public async Task<ActionResult<bool>> SaveProducts(int recipeId, [FromBody] RecipeProductListDTO recipeProductListDTO)
         {
-            var insertResult = await _recipeService.SaveProductsAsync(recipeId, recipeProductListDTO.RecipeProductList);
+            var insertResult = await _recipeService.SaveProducts(recipeId, recipeProductListDTO.RecipeProductList);
             if (!insertResult)
                 return NotFound();
 
@@ -74,7 +78,7 @@ namespace OrderYourChow.CRM.Controllers
         [HttpPut("description")]
         public async Task<ActionResult<bool>> AddDescription([FromForm] RecipeDescriptionDTO recipeDescriptionDTO)
         {
-            var updateResult = await _recipeRepository.AddDescriptionAsync(recipeDescriptionDTO);
+            var updateResult = await _recipeRepository.UpdateDescriptionAsync(recipeDescriptionDTO);
             if (!updateResult)
                 return NotFound();
 
@@ -100,6 +104,30 @@ namespace OrderYourChow.CRM.Controllers
             if (!insertResult)
                 return NotFound();
 
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpDelete("{recipeId}")]
+        public async Task<IActionResult> DeleteRecipe(int recipeId)
+        {
+            var result = await _recipeService.DeleteRecipe(recipeId);
+
+            if (result is ErrorRecipeDTO)
+                return BadRequest(new { (result as ErrorRecipeDTO).Message });
+            else if(result is EmptyRecipeDTO)
+                return NotFound(new { (result as EmptyRecipeDTO).Message });
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRecipe(IFormFile imageFile, [FromForm] RecipeDTO recipeDTO)
+        {
+            var result = await _recipeService.UpdateRecipe(imageFile, recipeDTO);
+
+            if (result is ErrorRecipeDTO)
+                return BadRequest(new { (result as ErrorRecipeDTO).Message });
+            else if (result is EmptyRecipeDTO)
+                return NotFound(new { (result as EmptyRecipeDTO).Message });
             return StatusCode(StatusCodes.Status204NoContent);
         }
     }

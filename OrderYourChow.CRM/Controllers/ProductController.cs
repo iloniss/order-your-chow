@@ -51,9 +51,7 @@ namespace OrderYourChow.CRM.Controllers
             var result = await _productService.UpdateProduct(imageFile, productDTO);
 
             if(result is ErrorProductDTO)
-            {
                 return BadRequest(new { (result as ErrorProductDTO).Message });
-            }
             else if (result is EmptyProductDTO)
                 return NotFound(new { (result as EmptyProductDTO).Message });
             return StatusCode(StatusCodes.Status204NoContent);

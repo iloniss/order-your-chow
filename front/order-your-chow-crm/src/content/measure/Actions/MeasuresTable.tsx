@@ -14,70 +14,13 @@ import {
   TableRow,
   TableContainer,
   Typography,
-  useTheme,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle
+  useTheme
 } from '@mui/material';
-
 import { ProductMeasure } from 'src/models/product_measure';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import measureService from 'src/services/measureService';
-
-function DeleteDialog(props) {
-  const {
-    productMeasureId,
-    open,
-    setOpen,
-    setProductMeasures,
-    productMeasures
-  } = props;
-
-  const deleteMeasure = async (productMeasureId: number) => {
-    var result = await measureService.deleteMeasure(productMeasureId);
-    if (result == null) {
-      setProductMeasures(
-        productMeasures.filter(
-          (productMeasures) =>
-            productMeasureId !== productMeasures.productMeasureId
-        )
-      );
-    } else {
-      alert(result);
-    }
-    setOpen(false);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        {'Czy na pewno chcesz usunąć jednostkę miary?'}
-      </DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Nie</Button>
-        <Button
-          onClick={async () => {
-            await deleteMeasure(productMeasureId);
-          }}
-          autoFocus
-        >
-          Tak
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+import DeleteDialog from 'src/components/DeleteDialog/DeleteDialog';
 
 interface MeasuresTableProps {
   className?: string;
@@ -117,6 +60,21 @@ const MeasuresTable: FC<MeasuresTableProps> = ({
 
   var paginatedProducts = applyPagination(productMeasures, page, limit);
   const theme = useTheme();
+
+  const deleteMeasure = async (productMeasureId: number) => {
+    var result = await measureService.deleteMeasure(productMeasureId);
+    if (result == null) {
+      setProductMeasures(
+        productMeasures.filter(
+          (productMeasures) =>
+            productMeasureId !== productMeasures.productMeasureId
+        )
+      );
+    } else {
+      alert(result);
+    }
+    setOpen(false);
+  };
 
   return (
     <Card>
@@ -200,11 +158,11 @@ const MeasuresTable: FC<MeasuresTableProps> = ({
         </Table>
       </TableContainer>
       <DeleteDialog
-        productMeasureId={productMeasureId}
+        itemId={productMeasureId}
         open={open}
         setOpen={setOpen}
-        setProductMeasures={setProductMeasures}
-        productMeasures={productMeasures}
+        deleteItem={deleteMeasure}
+        itemName={'miarę'}
       />
       <Box p={2}>
         <TablePagination

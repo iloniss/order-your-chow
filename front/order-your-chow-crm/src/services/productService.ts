@@ -2,15 +2,17 @@ import http from '../http-common';
 import { Product } from 'src/models/product';
 import { AxiosResponse, AxiosError } from 'axios';
 import { AddProduct } from 'src/models/add_product';
+import { ErrorResponse, handleError } from './serviceHelper';
+import { ProductQuery } from 'src/models/product/query/product_query';
 
 class ProductService {
   async getAll() {
-    return await http.get<Array<Product>>('/product');
+    return await http.get<Array<Product>>('/product/list');
   }
   // zmienić model na AddProduct zgodnie z API
 
-  async getProductById(productId: number) {
-    return await http.get<AddProduct>('/product/getById/' + productId);
+  async getProduct(productQuery: ProductQuery) {
+    return await http.get<AddProduct>('/product', { params: productQuery });
   }
 
   async deleteProduct(productId: number) {
@@ -19,14 +21,8 @@ class ProductService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 400) {
-          return 'Nie można usunąć produktu, który jest używany.';
-        } else if (reason.response!.status === 404) {
-          return 'Nie znaleziono produktu.';
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
 
@@ -40,20 +36,14 @@ class ProductService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 400) {
-          return reason.response.data.errors.Name;
-        } else if (reason.response!.status === 409) {
-          return reason.response.data;
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
 
-  async putProduct(productId: number, data: FormData) {
+  async putProduct(data: FormData) {
     return await http
-      .put<Product>('/product/' + productId.toString(), data, {
+      .put<Product>('/product', data, {
         headers: {
           'Content-type': 'multipart/form-data'
         }
@@ -61,17 +51,8 @@ class ProductService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (
-          reason.response!.status === 400 ||
-          reason.response!.status === 404
-        ) {
-          return reason.response.data.errors.Name;
-        } else if (reason.response!.status === 409) {
-          return reason.response.data;
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
 }

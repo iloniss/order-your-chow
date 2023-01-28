@@ -1,6 +1,7 @@
 import http from '../http-common';
 import { AxiosResponse, AxiosError } from 'axios';
 import { ProductCategory } from 'src/models/product_category';
+import { ErrorResponse, handleError } from './serviceHelper';
 
 class CategoryService {
   async getAllCategories() {
@@ -13,14 +14,8 @@ class CategoryService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 400) {
-          return 'Nie można usunąć kategorii, która jest używana.';
-        } else if (reason.response!.status === 404) {
-          return 'Nie znaleziono pkategorii.';
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
   async getCategory(productCategoryId: number) {
@@ -35,14 +30,8 @@ class CategoryService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 400) {
-          return reason.response.data.errors.Name;
-        } else if (reason.response!.status === 409) {
-          return reason.response.data;
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
 
@@ -52,14 +41,8 @@ class CategoryService {
       .then((response: AxiosResponse) => {
         return null;
       })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 400) {
-          return reason.response.data.errors.Name;
-        } else if (reason.response!.status === 404) {
-          return reason.response.data;
-        } else {
-          return 'Nieoczekiwany problem.';
-        }
+      .catch((reason: AxiosError<ErrorResponse>) => {
+        return handleError(reason);
       });
   }
 }

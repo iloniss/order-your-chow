@@ -1,5 +1,5 @@
 import { Card } from '@mui/material';
-import { RecipeCategory } from 'src/models/recipe_category';
+import { RecipeCategory } from 'src/models/recipe/recipe_category';
 import RecipeService from './../../../services/recipeService';
 import { useEffect, useState } from 'react';
 import AddRecipesCard from './AddRecipesCard';
