@@ -74,12 +74,13 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
             {
+                var oldImage = product.Image;
                 product.Name = productDTO.Name;
                 product.Image = string.IsNullOrEmpty(productDTO.Image) ? product.Image : productDTO.Image;
                 product.CategoryId = productDTO.ProductCategoryId;
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
-                return new UpdatedProductDTO();
+                return new UpdatedProductDTO() { Image = oldImage };
             }
             catch (Exception)
             {
@@ -95,6 +96,6 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
 
         public async Task<bool> ProductIsUsed(int productId) => 
             await _orderYourChowContext.DRecipeProducts
-                .Where(x => x.ProductId == productId).AnyAsync();
+                .AnyAsync(x => x.ProductId == productId);
     }
 }

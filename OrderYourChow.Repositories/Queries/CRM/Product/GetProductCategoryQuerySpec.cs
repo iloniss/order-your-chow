@@ -1,7 +1,6 @@
 ﻿using LinqKit;
 using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.DAL.CORE.Models;
-using System;
 using System.Linq.Expressions;
 
 namespace OrderYourChow.Repositories.Queries.CRM.Product

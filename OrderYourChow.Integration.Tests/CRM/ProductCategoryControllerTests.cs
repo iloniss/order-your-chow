@@ -7,6 +7,7 @@ using OrderYourChow.DAL.CORE.Models;
 
 namespace OrderYourChow.Integration.Tests.CRM
 {
+    [Collection("Integration")]
     public class ProductCategoryControllerTests 
         : IClassFixture<OrderYourChowCRMApplicationFactory<Program>>
     {
@@ -171,6 +172,7 @@ namespace OrderYourChow.Integration.Tests.CRM
 
             //Clean
             context.Remove(context.SProducts.SingleOrDefault());
+            context.SaveChanges();
             Clear();
         }
 

@@ -4,7 +4,7 @@ using OrderYourChow.Repositories.Repositories.CRM.Product;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
 {
-    [Collection("ProductRepository")]
+    [Collection("Repository")]
     public class ProductIsUsedTests : ProductBase
     {
         [Fact]
@@ -14,7 +14,7 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
             SProductCategory productCategory = new() { Name = "Beverages" };
             OrderYourChowContext.SProductCategories.Add(productCategory);
             SProduct product = new() { Category = productCategory, Name = "Whisky" };
-            OrderYourChowContext.SProducts.Add(new SProduct() { Category = productCategory, Name = "Whisky" });
+            OrderYourChowContext.SProducts.Add(product);
             SRecipeCategory recipeCategory = new() { Name = "Drink" };
             OrderYourChowContext.SRecipeCategories.Add(recipeCategory);
             DRecipe recipe = new() { Name = "Whiskey sour", Category = recipeCategory };
@@ -33,8 +33,6 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
 
             // Clean
             OrderYourChowContext.RemoveRange(OrderYourChowContext.DRecipeProducts);
-            OrderYourChowContext.RemoveRange(OrderYourChowContext.SProductMeasures);
-            OrderYourChowContext.RemoveRange(OrderYourChowContext.SProductMeasures);
             OrderYourChowContext.RemoveRange(OrderYourChowContext.DRecipes);
             OrderYourChowContext.RemoveRange(OrderYourChowContext.SRecipeCategories);
             Clear();

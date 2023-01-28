@@ -2,11 +2,10 @@
 using OrderYourChow.CORE.Queries.CRM.Product;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.Repositories.Repositories.CRM.Product;
-using OrderYourChow.Repositories.Tests.Shared;
 
 namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
 {
-    [Collection("ProductRepository")]
+    [Collection("Repository")]
     public class GetProductCategoryTests : ProductCategoryBase
     {
         [Fact]
@@ -35,7 +34,6 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.ProductCategory
         public async Task GetProductCategoryAsync_ShouldNotReturnProductCategory_WhenGivenInvalidProductCategoryId()
         {
             // Arrange
-            var options = new TestOrderYourChowContext().GetTestContextOptions();
             SProductCategory productCategory = new() { Name = "Beverages" };
             OrderYourChowContext.SProductCategories.Add(productCategory);
             OrderYourChowContext.SaveChanges();

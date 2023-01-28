@@ -3,10 +3,11 @@ using OrderYourChow.CORE.Models.Shared.Recipe;
 using OrderYourChow.CORE.Queries.CRM.Recipe;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OrderYourChow.Infrastructure.Services;
 
 namespace OrderYourChow.CORE.Contracts.CRM.Recipe
 {
-    public interface IRecipeRepository
+    public interface IRecipeRepository : IScopedRepository
     {
         Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive);
         Task<RecipeDTO> GetRecipeAsync(GetRecipeQuery getRecipeQuery);

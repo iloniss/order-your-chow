@@ -15,10 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileProcessor.CORE\FileProcessor.CORE.csproj" />
+	<ProjectReference Include="..\FileProcessor.CORE\FileProcessor.CORE.csproj" />
     <ProjectReference Include="..\FileProcessor\FileProcessor.csproj" />
     <ProjectReference Include="..\OrderYourChow.CORE\OrderYourChow.CORE.csproj" />
     <ProjectReference Include="..\OrderYourChow.DAL.CORE\OrderYourChow.DAL.CORE.csproj" />
+    <ProjectReference Include="..\OrderYourChow.Infrastructure\OrderYourChow.Infrastructure.csproj" />
     <ProjectReference Include="..\OrderYourChow.Repositories\OrderYourChow.Repositories.csproj" />
   </ItemGroup>
 	

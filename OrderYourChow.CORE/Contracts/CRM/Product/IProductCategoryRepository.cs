@@ -1,11 +1,10 @@
 ﻿using OrderYourChow.CORE.Models.CRM.Product;
 using OrderYourChow.CORE.Queries.CRM.Product;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using OrderYourChow.Infrastructure.Services;
 
 namespace OrderYourChow.CORE.Contracts.CRM.Product
 {
-    public interface IProductCategoryRepository
+    public interface IProductCategoryRepository : IScopedRepository
     {
         Task<ProductCategoryDTO> AddProductCategoryAsync(ProductCategoryDTO productCategoryDTO);
         Task<List<ProductCategoryDTO>> GetProductCategoriesAsync();
