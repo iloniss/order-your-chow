@@ -11,6 +11,7 @@ namespace OrderYourChow.Repositories.Mappings.CRM.Recipe
             CreateMap<DRecipe, RecipeDTO>()
                 .ForMember(d => d.RecipeId, opt => opt.MapFrom(src => src.RecipeId))
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(d => d.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(d => d.Duration, opt => opt.MapFrom(src => src.Duration))
                 .ForMember(d => d.RecipeCategoryId, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(d => d.Meat, opt => opt.MapFrom(src => src.Meat))
@@ -30,8 +31,6 @@ namespace OrderYourChow.Repositories.Mappings.CRM.Recipe
             CreateMap<DRecipe, RecipeListDTO>()
                 .ForMember(d => d.RecipeId, opt => opt.MapFrom(src => src.RecipeId))
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(d => d.Rating, opt => opt.MapFrom(src => src.Rating))
-                .ForMember(d => d.Favourite, opt => opt.MapFrom(src => src.Favourite))
                 .ForMember(d => d.Image, opt => opt.MapFrom(src => src.MainImage));
 
         }

@@ -1,16 +1,16 @@
 import { Card } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Recipe } from 'src/models/recipe';
 import { Product } from 'src/models/product';
 import { ProductMeasure } from 'src/models/product_measure';
 import productService from 'src/services/productService';
 import recipeService from 'src/services/recipeService';
 import AddIngredientsCard from './AddIngredientsCard';
 import measureService from 'src/services/measureService';
-import { RecipeProduct } from 'src/models/recipe_product';
+import { RecipeProduct } from 'src/models/recipe/recipe_product';
+import { RecipesList } from 'src/models/recipe/recipes_list';
 
 const AddIngredients = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<RecipesList[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<ProductMeasure[]>([]);
   const [recipeProducts, setRecipeProducts] = useState<RecipeProduct[]>([]);

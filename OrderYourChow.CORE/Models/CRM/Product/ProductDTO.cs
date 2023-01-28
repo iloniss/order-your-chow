@@ -9,9 +9,6 @@ namespace OrderYourChow.CORE.Models.CRM.Product
     }
     public sealed class EmptyProductDTO : ProductDTO, IErrorOperationDto
     {
-        public EmptyProductDTO()
-        {
-        }
         public EmptyProductDTO(string message)
         {
             Message = message;

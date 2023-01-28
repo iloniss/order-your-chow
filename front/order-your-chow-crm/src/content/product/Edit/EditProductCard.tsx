@@ -68,6 +68,7 @@ const EditProductCard: FC<EditProductCardProps> = ({
       'productCategoryId',
       productData.productCategoryId.toString()
     );
+    loginFromData.append('productId', productData.productId.toString());
     loginFromData.append('name', productData.name);
 
     if (
@@ -81,10 +82,7 @@ const EditProductCard: FC<EditProductCardProps> = ({
       );
     }
 
-    var result = await ProductService.putProduct(
-      productData.productId,
-      loginFromData
-    );
+    var result = await ProductService.putProduct(loginFromData);
     if (result == null) {
       window.location.href = '/product/actions';
     } else {

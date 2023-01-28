@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderYourChow.DAL.CORE.Models;
 
+#nullable disable
+
 namespace OrderYourChow.DAL.CORE.Migrations
 {
     [DbContext(typeof(OrderYourChowContext))]
@@ -15,16 +17,18 @@ namespace OrderYourChow.DAL.CORE.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.13")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DDietDay", b =>
                 {
                     b.Property<int>("DietDayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DietDayId"), 1L, 1);
 
                     b.Property<int>("DateDayId")
                         .HasColumnType("int");
@@ -51,15 +55,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("D_DIET_DAY");
+                    b.ToTable("D_DIET_DAY", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DDietDayRecipe", b =>
                 {
                     b.Property<int>("DietDayRecipeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DietDayRecipeId"), 1L, 1);
 
                     b.Property<int>("DietDayId")
                         .HasColumnType("int");
@@ -96,15 +101,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("D_DIET_DAY_RECIPE");
+                    b.ToTable("D_DIET_DAY_RECIPE", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DPlan", b =>
                 {
                     b.Property<int>("PlanId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"), 1L, 1);
 
                     b.Property<DateTime>("Sysdate")
                         .ValueGeneratedOnAdd()
@@ -126,15 +132,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("WeekId");
 
-                    b.ToTable("D_PLAN");
+                    b.ToTable("D_PLAN", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DPlanRecipe", b =>
                 {
                     b.Property<int>("PlanRecipeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanRecipeId"), 1L, 1);
 
                     b.Property<int>("DayId")
                         .HasColumnType("int");
@@ -161,15 +168,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("D_PLAN_RECIPE");
+                    b.ToTable("D_PLAN_RECIPE", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DRecipe", b =>
                 {
                     b.Property<int>("RecipeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeId"), 1L, 1);
 
                     b.Property<bool?>("Active")
                         .HasColumnType("bit");
@@ -217,15 +225,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("D_RECIPE");
+                    b.ToTable("D_RECIPE", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DRecipeFavourite", b =>
                 {
                     b.Property<int>("RecipeFavouriteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeFavouriteId"), 1L, 1);
 
                     b.Property<int?>("DRecipeRecipeId")
                         .HasColumnType("int");
@@ -241,15 +250,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("DRecipeRecipeId");
 
-                    b.ToTable("D_D_RECIPE_FAVOURITE");
+                    b.ToTable("D_RECIPE_FAVOURITE", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DRecipeImage", b =>
                 {
                     b.Property<int>("RecipeImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeImageId"), 1L, 1);
 
                     b.Property<string>("Image")
                         .HasMaxLength(200)
@@ -275,15 +285,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("D_RECIPE_IMAGES");
+                    b.ToTable("D_RECIPE_IMAGES", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DRecipeProduct", b =>
                 {
                     b.Property<int>("RecipeProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeProductId"), 1L, 1);
 
                     b.Property<decimal>("Count")
                         .HasColumnType("decimal(10,2)");
@@ -318,15 +329,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("D_RECIPE_PRODUCT");
+                    b.ToTable("D_RECIPE_PRODUCT", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DShopping", b =>
                 {
                     b.Property<int>("ShoppingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingId"), 1L, 1);
 
                     b.Property<decimal?>("Cost")
                         .HasColumnType("money");
@@ -353,15 +365,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("ShoppingId")
                         .HasName("PK__D_SHOPPI__8E3AF518CAB77B3A");
 
-                    b.ToTable("D_SHOPPING");
+                    b.ToTable("D_SHOPPING", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DShoppingList", b =>
                 {
                     b.Property<int>("ShoppingListId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingListId"), 1L, 1);
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
@@ -388,15 +401,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("ShoppingId");
 
-                    b.ToTable("D_SHOPPING_LIST");
+                    b.ToTable("D_SHOPPING_LIST", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DUser", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(320)");
@@ -424,15 +438,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("UserId")
                         .HasName("PK__D_USER_UserId");
 
-                    b.ToTable("D_USER");
+                    b.ToTable("D_USER", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SDateDay", b =>
                 {
                     b.Property<int>("DateDayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DateDayId"), 1L, 1);
 
                     b.Property<DateTime>("DateDay")
                         .HasColumnType("date");
@@ -445,15 +460,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("DayId");
 
-                    b.ToTable("S_DATE_DAY");
+                    b.ToTable("S_DATE_DAY", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SDay", b =>
                 {
                     b.Property<int>("DayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DayId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -475,15 +491,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("DayId")
                         .HasName("PK__S_DAY__BF3DD8C568465FE9");
 
-                    b.ToTable("S_DAY");
+                    b.ToTable("S_DAY", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SProduct", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -517,15 +534,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("S_PRODUCT");
+                    b.ToTable("S_PRODUCT", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SProductCategory", b =>
                 {
                     b.Property<int>("ProductCategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductCategoryId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -547,15 +565,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("ProductCategoryId")
                         .HasName("PK__S_PRODUC__3224ECCEAB43FBAA");
 
-                    b.ToTable("S_PRODUCT_CATEGORY");
+                    b.ToTable("S_PRODUCT_CATEGORY", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SProductMeasure", b =>
                 {
                     b.Property<int>("ProductMeasureId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductMeasureId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -577,15 +596,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("ProductMeasureId")
                         .HasName("PK__S_PRODUC__4A00517B8885EE62");
 
-                    b.ToTable("S_PRODUCT_MEASURE");
+                    b.ToTable("S_PRODUCT_MEASURE", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SRecipeCategory", b =>
                 {
                     b.Property<int>("RecipeCategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeCategoryId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -607,15 +627,16 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("RecipeCategoryId")
                         .HasName("PK__S_RECIPE__747A031B1E2535C2");
 
-                    b.ToTable("S_RECIPE_CATEGORY");
+                    b.ToTable("S_RECIPE_CATEGORY", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.SWeek", b =>
                 {
                     b.Property<int>("WeekId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WeekId"), 1L, 1);
 
                     b.Property<DateTime>("End")
                         .HasColumnType("date");
@@ -644,7 +665,7 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasKey("WeekId")
                         .HasName("PK__S_WEEK__C814A5C1B8C5888A");
 
-                    b.ToTable("S_WEEK");
+                    b.ToTable("S_WEEK", (string)null);
                 });
 
             modelBuilder.Entity("OrderYourChow.DAL.CORE.Models.DDietDay", b =>
@@ -652,14 +673,14 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SDateDay", "SDateDay")
                         .WithMany("DDietDays")
                         .HasForeignKey("DateDayId")
-                        .HasConstraintName("FK__D_DIET_DAY__S_DATE_DAY")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_DIET_DAY__S_DATE_DAY");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DUser", "DUser")
                         .WithMany("DDietDays")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__D_DIET_DAY__D_USER")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_DIET_DAY__D_USER");
 
                     b.Navigation("DUser");
 
@@ -671,14 +692,14 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DDietDay", "DDietDay")
                         .WithMany("DDietDayRecipes")
                         .HasForeignKey("DietDayId")
-                        .HasConstraintName("FK__D_DIET_DAY_RECIPE_D_DIET_DAY")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_DIET_DAY_RECIPE_D_DIET_DAY");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DRecipe", "DRecipe")
                         .WithMany("DDietDayRecipes")
                         .HasForeignKey("RecipeId")
-                        .HasConstraintName("FK__D_DIET_DAY_RECIPE_D_RECIPE")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_DIET_DAY_RECIPE_D_RECIPE");
 
                     b.Navigation("DDietDay");
 
@@ -690,8 +711,8 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SWeek", "Week")
                         .WithMany("DPlans")
                         .HasForeignKey("WeekId")
-                        .HasConstraintName("FK__D_PLAN__Sysdate__44FF419A")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_PLAN__Sysdate__44FF419A");
 
                     b.Navigation("Week");
                 });
@@ -701,14 +722,14 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SDay", "Day")
                         .WithMany("DPlanRecipes")
                         .HasForeignKey("DayId")
-                        .HasConstraintName("FK__D_PLAN_RE__DayId__00200768")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_PLAN_RE__DayId__00200768");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DRecipe", "Recipe")
                         .WithMany("DPlanRecipes")
                         .HasForeignKey("RecipeId")
-                        .HasConstraintName("FK__D_PLAN_RE__Sysda__7F2BE32F")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_PLAN_RE__Sysda__7F2BE32F");
 
                     b.Navigation("Day");
 
@@ -720,8 +741,8 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SRecipeCategory", "Category")
                         .WithMany("DRecipes")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK__D_RECIPE__Sysdat__6B24EA82")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_RECIPE__Sysdat__6B24EA82");
 
                     b.Navigation("Category");
                 });
@@ -740,8 +761,8 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DRecipe", "Recipe")
                         .WithMany("DRecipeImages")
                         .HasForeignKey("RecipeId")
-                        .HasConstraintName("FK__D_RECIPE___Sysda__18EBB532")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_RECIPE___Sysda__18EBB532");
 
                     b.Navigation("Recipe");
                 });
@@ -751,20 +772,20 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SProduct", "Product")
                         .WithMany("DRecipeProducts")
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("FK__D_RECIPE___Produ__05D8E0BE")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_RECIPE___Produ__05D8E0BE");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SProductMeasure", "ProductMeasure")
                         .WithMany("DRecipeProducts")
                         .HasForeignKey("ProductMeasureId")
-                        .HasConstraintName("FK__D_RECIPE___Produ__06CD04F7")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_RECIPE___Produ__06CD04F7");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DRecipe", "Recipe")
                         .WithMany("DRecipeProducts")
                         .HasForeignKey("RecipeId")
-                        .HasConstraintName("FK__D_RECIPE___Sysda__04E4BC85")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_RECIPE___Sysda__04E4BC85");
 
                     b.Navigation("Product");
 
@@ -778,14 +799,14 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DRecipe", "Recipe")
                         .WithMany("DShoppingLists")
                         .HasForeignKey("RecipeId")
-                        .HasConstraintName("FK__D_SHOPPIN__Sysda__797309D9")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_SHOPPIN__Sysda__797309D9");
 
                     b.HasOne("OrderYourChow.DAL.CORE.Models.DShopping", "Shopping")
                         .WithMany("DShoppingLists")
                         .HasForeignKey("ShoppingId")
-                        .HasConstraintName("FK__D_SHOPPIN__Shopp__7A672E12")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__D_SHOPPIN__Shopp__7A672E12");
 
                     b.Navigation("Recipe");
 
@@ -797,8 +818,8 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SDay", "SDay")
                         .WithMany("SDateDays")
                         .HasForeignKey("DayId")
-                        .HasConstraintName("FK__S_DATE_DAY__S_DAY")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__S_DATE_DAY__S_DAY");
 
                     b.Navigation("SDay");
                 });
@@ -808,8 +829,8 @@ namespace OrderYourChow.DAL.CORE.Migrations
                     b.HasOne("OrderYourChow.DAL.CORE.Models.SProductCategory", "Category")
                         .WithMany("SProducts")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK__S_PRODUCT__Sysda__619B8048")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__S_PRODUCT__Sysda__619B8048");
 
                     b.Navigation("Category");
                 });

@@ -76,7 +76,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
             {
                 var oldImage = product.Image;
                 product.Name = productDTO.Name;
-                product.Image = productDTO.Image ?? product.Image;
+                product.Image = string.IsNullOrEmpty(productDTO.Image) ? product.Image : productDTO.Image;
                 product.CategoryId = productDTO.ProductCategoryId;
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
