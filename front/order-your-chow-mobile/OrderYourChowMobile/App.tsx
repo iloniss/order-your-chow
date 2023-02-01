@@ -36,35 +36,20 @@ function Section({children}: SectionProps): JSX.Element {
 
   const getRecipes = async () => {
     try {
-      console.log('dupa');
       var result = await recipeService.getAll(true);
-      console.log(result);
-      console.log(result.request);
-      console.log(result);
       setRecipesList(result.data);
-    } catch (error) {
-      console.log('chuj');
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     getRecipes();
   }, []);
 
-  const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
-      {recipesList.map(x => x.name)}
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+      {recipesList.map(x => {
+        return <Text>{x.name}</Text>;
+      })}
     </View>
   );
 }

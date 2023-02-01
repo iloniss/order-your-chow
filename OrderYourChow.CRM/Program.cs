@@ -75,7 +75,7 @@ app.UseStaticFiles();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
