@@ -35,8 +35,8 @@
     "web-vitals": "2.1.2"
   },
   "scripts": {
-    "start": "cross-env BROWSER=chrome react-scripts start",
-    "build": "react-scripts build",
+    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
