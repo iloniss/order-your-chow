@@ -1,12 +1,10 @@
 ﻿using OrderYourChow.CORE.Models.API.Recipe;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CORE.Contracts.API.Recipe
 {
     public interface IRecipeRepository
     {
-        Task<List<RecipeInfoDTO>> GetRecipeInfoAsync(int dietDayId);
+        Task<IList<RecipeInfoDTO>> GetRecipeInfoAsync(int dietDayId);
         Task<RecipeDTO> GetRecipeAsync(int dietDayRecipeId);
         Task<bool> SetEatenAsync(int dietDayRecipeId);
         Task<RecipeDTO> SetMultiplierAsync(int dietDayRecipeId, decimal multiplier);

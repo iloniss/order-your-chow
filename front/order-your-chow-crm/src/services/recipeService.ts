@@ -21,7 +21,7 @@ class RecipeService {
   }
 
   async getAllRecipeCategories() {
-    return await http.get<Array<RecipeCategory>>('/recipe/category');
+    return await http.get<Array<RecipeCategory>>('/recipe/categories');
   }
 
   async getRecipeProducts(recipeId: Number) {

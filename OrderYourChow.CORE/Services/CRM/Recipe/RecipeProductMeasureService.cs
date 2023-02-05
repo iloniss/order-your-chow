@@ -30,7 +30,7 @@ namespace OrderYourChow.CORE.Services.CRM.Recipe
             return await _recipeProductMeasureRepository.DeleteRecipeProductMeasureAsync(recipeProductMeasureId);
         }
 
-        public async Task<List<RecipeProductMeasureDTO>> GetRecipeProductMeasures() =>
+        public async Task<IList<RecipeProductMeasureDTO>> GetRecipeProductMeasures() =>
             await _recipeProductMeasureRepository.GetRecipeProductMeasuresAsync();
 
         public async Task<RecipeProductMeasureDTO> GetRecipeProductMeasureById(int recipeProductMeasureId) =>

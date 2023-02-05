@@ -2,10 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderYourChow.CORE.Contracts.API.Calendar;
 using OrderYourChow.CORE.Models.API.Calendar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OrderYourChow.DAL.CORE.Models;
 
 namespace OrderYourChow.Repositories.Repositories.API.Calendar
@@ -22,22 +18,22 @@ namespace OrderYourChow.Repositories.Repositories.API.Calendar
 
             
         }
-        public async Task<List<DietDayDTO>> GetDietDays(DateTime? dateMin, DateTime? dateMax)
+        public async Task<IList<DietDayDTO>> GetDietDays(DateTime? dateMin, DateTime? dateMax)
         {
             if(dateMin == null || dateMax == null)
             {
-                return _mapper.Map<List<DietDayDTO>>(await _orderYourChowContext.DDietDays
-                    .Include(x => x.SDateDay)
+                return _mapper.Map<IList<DietDayDTO>>(await _orderYourChowContext.DDietDays
                     .Include(x => x.SDateDay)
                     .ThenInclude(x => x.SDay)
-                    .Where(x => x.SDateDay.DateDay >= DateTime.Now.AddDays(-7) && x.SDateDay.DateDay <= DateTime.Now.AddDays(7))
+                    .Where(x => x.SDateDay.DateDay >= DateTime.Now.AddDays(-7) && x.SDateDay.DateDay <= DateTime.Now.AddDays(7)
+                        && x.UserId == 2)
                     .OrderBy(x => x.DateDayId).ToListAsync());
             }
-            return _mapper.Map<List<DietDayDTO>>(await _orderYourChowContext.DDietDays
-                        .Include(x => x.SDateDay)
+            return _mapper.Map<IList<DietDayDTO>>(await _orderYourChowContext.DDietDays
                         .Include(x => x.SDateDay)
                         .ThenInclude(x => x.SDay)
-                        .Where(x => x.SDateDay.DateDay >= dateMin && x.SDateDay.DateDay <= dateMax)
+                        .Where(x => x.SDateDay.DateDay >= dateMin && x.SDateDay.DateDay <= dateMax
+                            && x.UserId == 2)
                         .OrderBy(x => x.DateDayId).ToListAsync());
         }
     }

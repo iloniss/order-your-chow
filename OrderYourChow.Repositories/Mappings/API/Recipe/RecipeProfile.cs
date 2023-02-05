@@ -15,7 +15,8 @@ namespace OrderYourChow.Repositories.Mappings.API.Recipe
                 .ForMember(d => d.Rating, opt => opt.MapFrom(src => src.Rating))
                 .ForMember(d => d.Favourite, opt => opt.MapFrom(src => src.Favourite))
                 .ForMember(d => d.MainImage, opt => opt.MapFrom(src => src.MainImage))
-                .ForMember(d => d.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
+                .ForMember(d => d.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
+                .ForMember(d => d.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
             CreateMap<DDietDayRecipe, RecipeDTO>()
                 .ForMember(d => d.RecipeId, opt => opt.MapFrom(src => src.RecipeId))

@@ -25,7 +25,7 @@ namespace OrderYourChow.DAL.CORE.Models
         public bool Favourite { get; set; }
         public bool Meat { get; set; }
         public string MainImage { get; set; }
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
         public string Syslog { get; set; }
         public DateTime Sysdate { get; set; }
 

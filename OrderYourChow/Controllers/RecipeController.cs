@@ -38,12 +38,9 @@ namespace OrderYourChow.Controllers
 
         }
 
-        [HttpGet("recipesInfo")]
-        public async Task<ActionResult<List<RecipeInfoDTO>>> GetRecipesInfo(int dietDayId)
-        {
-            return await _recipeRepository.GetRecipeInfoAsync(dietDayId);
-        }
-
+        [HttpGet("getRecipesForDietDayId")]
+        public async Task<ActionResult<IList<RecipeInfoDTO>>> GetRecipesInfo(int dietDayId) => 
+            Ok(await _recipeRepository.GetRecipeInfoAsync(dietDayId));
 
         [HttpGet("{dietDayRecipeId}")]
         public async Task<ActionResult<RecipeDTO>> GetRecipe(int dietDayRecipeId)
@@ -79,26 +76,26 @@ namespace OrderYourChow.Controllers
             return Ok(result);
         }
 
-        [HttpPost("addRecipeFavourite")]
-        public async Task<ActionResult<bool>> AddRecipeFavourite(int recipeId)
+        [HttpPost("addRecipeToFavourite/{recipeId}")]
+        public async Task<IActionResult> AddRecipeFavourite(int recipeId)
         {
             var result = await _recipeRepository.AddRecipeFavouriteAsync(recipeId);
             
             if (result == false)
                 return BadRequest();
 
-            return Ok(result);
+            return NoContent();
         }
 
-        [HttpDelete("deleteRecipeFavourite")]
-        public async Task<ActionResult<bool>> DeleteRecipeFavourite(int recipeId)
+        [HttpDelete("deleteRecipeFromFavourite/{recipeId}")]
+        public async Task<IActionResult> DeleteRecipeFavourite(int recipeId)
         {
             var result = await _recipeRepository.DeleteRecipeFavouriteAsync(recipeId);
 
             if (result == false)
                 return BadRequest();
 
-            return Ok(result);
+            return NoContent();
         }
 
         [HttpGet("getRecipeFavourite")]

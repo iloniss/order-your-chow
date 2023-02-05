@@ -43,7 +43,7 @@ namespace OrderYourChow.CRM.Controllers
                 return NotFound(new { (result as EmptyProductCategoryDTO).Message } );
             else if (result is ErrorProductCategoryDTO)
                 return BadRequest(new { (result as ErrorProductCategoryDTO).Message });
-            return StatusCode(StatusCodes.Status204NoContent);
+            return NoContent();
         }
 
         [HttpPut]
@@ -55,7 +55,7 @@ namespace OrderYourChow.CRM.Controllers
                 return BadRequest(new { (result as ErrorProductCategoryDTO).Message });
             else if (result is EmptyProductCategoryDTO)
                 return NotFound(new { (result as EmptyProductCategoryDTO).Message });
-            return StatusCode(StatusCodes.Status204NoContent);
+            return NoContent();
         }
     }
 }

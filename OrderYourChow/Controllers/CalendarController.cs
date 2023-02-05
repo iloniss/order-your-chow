@@ -15,11 +15,9 @@ namespace OrderYourChow.Controllers
         {
             _calendarRepository = calendarRepository;
         }
-        
+
         [HttpGet("dietDays")]
-        public async Task<ActionResult<List<DietDayDTO>>> GetDietDays(DateTime? dateMin, DateTime? dateMax) 
-        {
-            return Ok(await _calendarRepository.GetDietDays(dateMin, dateMax));
-        }        
+        public async Task<ActionResult<IList<DietDayDTO>>> GetDietDays(DateTime? dateMin, DateTime? dateMax) 
+            => Ok(await _calendarRepository.GetDietDays(dateMin, dateMax));
     }
 }

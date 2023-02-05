@@ -38,7 +38,7 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Product
         }
 
         public async Task<IList<ProductDTO>> GetProductsAsync() => 
-            _mapper.Map<List<ProductDTO>>(await _orderYourChowContext.SProducts
+            _mapper.Map<IList<ProductDTO>>(await _orderYourChowContext.SProducts
                 .Include(x => x.Category)
                 .OrderBy(x => x.Name).ToListAsync());
 

@@ -1,5 +1,4 @@
 ﻿using FileProcessor.CORE.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderYourChow.CORE.Contracts.CRM.Recipe;
 using OrderYourChow.CORE.Contracts.Services;
@@ -7,7 +6,6 @@ using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
 using OrderYourChow.CORE.Queries.CRM.Recipe;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace OrderYourChow.CRM.Controllers
 {
@@ -26,17 +24,14 @@ namespace OrderYourChow.CRM.Controllers
             _recipeService = recipeService;
         }
 
-        [HttpGet("category")]
-        public async Task<ActionResult<List<RecipeCategoryDTO>>> GetCategories()
-        {
-            return Ok(await _recipeRepository.GetRecipeCategoriesAsync());
-        }
+        [HttpGet("categories")]
+        public async Task<ActionResult<IList<RecipeCategoryDTO>>> GetCategories() => 
+            Ok(await _recipeService.GetRecipeCategories());
 
         [HttpGet]
-        public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes(bool? isActive)
-        {
-            return Ok(await _recipeRepository.GetRecipesAsync(isActive));
-        }
+        public async Task<ActionResult<List<RecipeListDTO>>> GetRecipes(bool? isActive) =>
+            Ok(await _recipeService.GetRecipes(isActive));
+
         [HttpGet("{recipeId}")]
         public async Task<ActionResult<RecipeDTO>> GetRecipe(int recipeId) =>
             Ok(await _recipeRepository.GetRecipeAsync(new GetRecipeQuery { RecipeId = recipeId}));

@@ -3,10 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OrderYourChow.DAL.CORE.Models;
 using OrderYourChow.CORE.Contracts.API.Recipe;
 using OrderYourChow.CORE.Models.API.Recipe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static OrderYourChow.CORE.Models.API.Recipe.RecipeDTO;
 
 namespace OrderYourChow.Repositories.Repositories.API.Recipe
@@ -21,10 +17,11 @@ namespace OrderYourChow.Repositories.Repositories.API.Recipe
             _mapper = mapper;
         }
         
-        public async Task<List<RecipeInfoDTO>> GetRecipeInfoAsync(int dietDayId)
+        public async Task<IList<RecipeInfoDTO>> GetRecipeInfoAsync(int dietDayId)
         {
-            return _mapper.Map<List<RecipeInfoDTO>>(await _orderYourChowContext.DDietDayRecipes
+            return _mapper.Map<IList<RecipeInfoDTO>>(await _orderYourChowContext.DDietDayRecipes
                 .Include(x => x.DRecipe)
+                .ThenInclude(x => x.Category)
                 .Where(x => x.DietDayId == dietDayId)
                 .Select(x => x.DRecipe)
                 .ToListAsync());
@@ -176,11 +173,13 @@ namespace OrderYourChow.Repositories.Repositories.API.Recipe
             if (result == null)
                 return false;
 
+            //Walidacja czy można dodać czy już takiego nie ma
+
             using var tran = _orderYourChowContext.Database.BeginTransaction();
             try
             {
                 //todo UserId
-                await _orderYourChowContext.DRecipeFavourites.AddAsync(new DRecipeFavourite() { RecipeId = recipeId, UserId = 1});
+                await _orderYourChowContext.DRecipeFavourites.AddAsync(new DRecipeFavourite() { RecipeId = recipeId, UserId = 2});
                 await _orderYourChowContext.SaveChangesAsync();
                 await tran.CommitAsync();
 
@@ -196,7 +195,7 @@ namespace OrderYourChow.Repositories.Repositories.API.Recipe
         {
             //todo UserId
             var result = await _orderYourChowContext.DRecipeFavourites
-                .Where(x => x.RecipeId == recipeId &&  x.UserId == 1)
+                .Where(x => x.RecipeId == recipeId &&  x.UserId == 2)
                 .SingleOrDefaultAsync();
 
             if (result == null)
@@ -223,7 +222,7 @@ namespace OrderYourChow.Repositories.Repositories.API.Recipe
             //todo UserId
             var recipes = await _orderYourChowContext.DRecipeFavourites
                 .Include(x => x.DRecipe)
-                .Where(x => x.UserId == 1 && x.DRecipe.CategoryId == categoryId)
+                .Where(x => x.UserId == 2 && x.DRecipe.CategoryId == categoryId)
                 .ToListAsync();
 
             if(recipes==null)

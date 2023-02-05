@@ -20,16 +20,16 @@ namespace OrderYourChow.Repositories.Repositories.CRM.Recipe
             _mapper = mapper;
         }
 
-        public async Task<List<RecipeCategoryDTO>> GetRecipeCategoriesAsync() =>
-            _mapper.Map<List<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories.OrderBy(x => x.RecipeCategoryId).ToListAsync());
-
-        //do zmiany
-        public async Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive)
-        {
-            return _mapper.Map<List<RecipeListDTO>>(await _orderYourChowContext.DRecipes
-                .Where(recipe => isActive == null || (recipe.Active ?? false) == isActive)
+        public async Task<IList<RecipeCategoryDTO>> GetRecipeCategoriesAsync() =>
+            _mapper.Map<IList<RecipeCategoryDTO>>(await _orderYourChowContext.SRecipeCategories
+                .OrderBy(x => x.RecipeCategoryId)
                 .ToListAsync());
-        }
+
+        public async Task<IList<RecipeListDTO>> GetRecipesAsync(bool? isActive) => 
+            _mapper.Map<IList<RecipeListDTO>>(await _orderYourChowContext.DRecipes
+                .Where(recipe => isActive == null || recipe.Active == isActive)
+                .OrderBy(x => x.Name)
+                .ToListAsync());
 
         public async Task<RecipeDTO> GetRecipeAsync(GetRecipeQuery getRecipeQuery)
         {

@@ -7,13 +7,14 @@ using OrderYourChow.CORE.Models.CRM.Recipe;
 using OrderYourChow.CORE.Models.Shared.Recipe;
 using OrderYourChow.CORE.Queries.CRM.Recipe;
 
-namespace OrderYourChow.CORE.Services
+namespace OrderYourChow.CORE.Services.CRM.Recipe
 {
     public class RecipeService : IRecipeService
     {
         private readonly IRecipeRepository _recipeRepository;
         private readonly IFileProcessor _fileProcessor;
         private readonly IFileProcessorValidator _fileProcessorValidator;
+
         public RecipeService(IRecipeRepository recipeRepository, IFileProcessor fileProcessor, IFileProcessorValidator fileProcessorValidator)
         {
             _recipeRepository = recipeRepository;
@@ -21,9 +22,15 @@ namespace OrderYourChow.CORE.Services
             _fileProcessorValidator = fileProcessorValidator;
         }
 
+        public async Task<IList<RecipeCategoryDTO>> GetRecipeCategories() =>
+            await _recipeRepository.GetRecipeCategoriesAsync();
+
+        public async Task<IList<RecipeListDTO>> GetRecipes(bool? isActive) =>
+            await _recipeRepository.GetRecipesAsync(isActive);
+
         public async Task<bool> SaveProducts(int recipeId, List<RecipeProductDTO> recipeProductDTOs)
         {
-            var recipe = await _recipeRepository.GetRecipeAsync(new GetRecipeQuery {RecipeId = recipeId });
+            var recipe = await _recipeRepository.GetRecipeAsync(new GetRecipeQuery { RecipeId = recipeId });
             if (recipe == null)
                 return false;
 
@@ -44,23 +51,23 @@ namespace OrderYourChow.CORE.Services
             var result = await _recipeRepository.DeleteRecipeAsync(recipeId);
 
             if (result is not EmptyRecipeDTO)
-            _fileProcessor.DeleteFile(result.MainImage, Const.Shared.Global.RecipeImagesPath);
+                _fileProcessor.DeleteFile(result.MainImage, Const.Shared.Global.RecipeImagesPath);
 
             return result;
         }
 
         public async Task<RecipeDTO> UpdateRecipe(IFormFile imageFile, RecipeDTO recipeDTO)
         {
-            if(imageFile != null && !_fileProcessorValidator.IsImageFile(imageFile))
+            if (imageFile != null && !_fileProcessorValidator.IsImageFile(imageFile))
             {
                 return new ErrorRecipeDTO(Const.Shared.Global.InvalidFile);
             }
 
             var existedRecipe = await _recipeRepository.GetRecipeAsync(new GetRecipeQuery { Name = recipeDTO.Name });
 
-            if(existedRecipe == null || existedRecipe.RecipeId == recipeDTO.RecipeId)
+            if (existedRecipe == null || existedRecipe.RecipeId == recipeDTO.RecipeId)
             {
-                if(imageFile != null)
+                if (imageFile != null)
                 {
                     _fileProcessor.DeleteFile(recipeDTO.MainImage, Const.Shared.Global.RecipeImagesPath);
                     recipeDTO.MainImage = await _fileProcessor.SaveFileFromWebsite(imageFile, Const.Shared.Global.RecipeImagesPath);
@@ -71,8 +78,6 @@ namespace OrderYourChow.CORE.Services
                 return result;
             }
             return new ErrorRecipeDTO(Const.CRM.Recipe.ExistedRecipe);
-
         }
-
     }
 }

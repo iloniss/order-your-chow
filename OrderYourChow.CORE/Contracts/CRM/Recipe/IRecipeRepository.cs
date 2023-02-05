@@ -9,10 +9,10 @@ namespace OrderYourChow.CORE.Contracts.CRM.Recipe
 {
     public interface IRecipeRepository : IScopedRepository
     {
-        Task<List<RecipeListDTO>> GetRecipesAsync(bool? isActive);
+        Task<IList<RecipeListDTO>> GetRecipesAsync(bool? isActive);
         Task<RecipeDTO> GetRecipeAsync(GetRecipeQuery getRecipeQuery);
         Task<RecipeDTO> DeleteRecipeAsync(int recipeId);
-        Task<List<RecipeCategoryDTO>> GetRecipeCategoriesAsync();
+        Task<IList<RecipeCategoryDTO>> GetRecipeCategoriesAsync();
         Task<RecipeProductListDTO> GetRecipeProductsAsync(int recipeId);
         Task<RecipeDTO> AddRecipeAsync(RecipeDTO recipeDTO);
         Task<bool> SaveProductsAsync(int recipeId, IEnumerable<RecipeProductDTO> newRecipeProducts,

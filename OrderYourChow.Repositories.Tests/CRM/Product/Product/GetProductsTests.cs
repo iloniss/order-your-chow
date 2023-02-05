@@ -11,10 +11,11 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
         public async Task GetProductsAsync_ShouldReturnProducts_InAscendingOrder()
         {
             // Arrange
+            string image = Guid.NewGuid().ToString();
             var productCategory = new SProductCategory { Name = "Beverages" };
             OrderYourChowContext.SProductCategories.Add(productCategory);
-            OrderYourChowContext.SProducts.Add(new SProduct { Name = "Tea", Category = productCategory });
-            OrderYourChowContext.SProducts.Add(new SProduct { Name = "Coffee", Category = productCategory });
+            OrderYourChowContext.SProducts.Add(new SProduct { Name = "Tea", Category = productCategory, Image = image });
+            OrderYourChowContext.SProducts.Add(new SProduct { Name = "Coffee", Category = productCategory, Image = image });
             OrderYourChowContext.SaveChanges();
 
             // Act
@@ -29,7 +30,8 @@ namespace OrderYourChow.Repositories.Tests.CRM.Product.Product
             result.Select(x => x.Name).Should().BeInAscendingOrder();
             result.Select(x => x.ProductCategoryId).Should().OnlyContain(x => x == productCategory.ProductCategoryId);
             result.Select(x => x.ProductCategory).Should().OnlyContain(x => x == productCategory.Name);
-
+            result.Select(x => x.Image).Should().OnlyContain(x => x == image);
+   
             // Clean
             Clear();
         }
